@@ -1,36 +1,8 @@
 import Link from "next/link";
 import Container from "@/components/common/Container";
-
-const categories = [
-  {
-    title: "Image Tools",
-    description: "Convert, compress, resize, and transform images in your browser.",
-    href: "/",
-    gradient: "from-blue-500 to-cyan-500",
-    tools: ["JPG ⇄ PNG", "WebP Converter", "Image Compressor", "Resize & Crop"],
-  },
-  {
-    title: "PDF Tools",
-    description: "Merge, split, compress, and convert PDFs instantly.",
-    href: "/",
-    gradient: "from-red-500 to-orange-500",
-    tools: ["PDF Compressor", "Merge PDF", "PDF to JPG", "Split PDF"],
-  },
-  {
-    title: "Text & Code",
-    description: "Format, minify, and validate JSON, HTML, CSS, and more.",
-    href: "/",
-    gradient: "from-emerald-500 to-teal-500",
-    tools: ["JSON Formatter", "HTML Minifier", "Diff Checker", "Regex Tester"],
-  },
-  {
-    title: "Developer Tools",
-    description: "Encoders, decoders, hashers, and network utilities.",
-    href: "/",
-    gradient: "from-purple-500 to-pink-500",
-    tools: ["Base64 Encode", "URL Encoder", "Color Converter", "UUID Generator"],
-  },
-];
+import CategoryCard from "@/components/tools/CategoryCard";
+import ToolGrid from "@/components/tools/ToolGrid";
+import { categories, getPopularTools } from "@/data/tools";
 
 export default function Home() {
   return (
@@ -50,7 +22,7 @@ export default function Home() {
             </p>
             <div className="mt-10 flex items-center justify-center gap-4">
               <Link
-                href="/"
+                href="/tools"
                 className="rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-colors"
               >
                 Browse All Tools
@@ -79,27 +51,7 @@ export default function Home() {
         </div>
         <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {categories.map((cat) => (
-            <Link
-              key={cat.title}
-              href={cat.href}
-              className="group relative rounded-xl border border-zinc-200 bg-white p-6 shadow-sm transition-all hover:shadow-md hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700"
-            >
-              <div className={`h-1.5 w-12 rounded-full bg-gradient-to-r ${cat.gradient}`} />
-              <h3 className="mt-4 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-                {cat.title}
-              </h3>
-              <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
-                {cat.description}
-              </p>
-              <ul className="mt-4 space-y-1.5">
-                {cat.tools.map((tool) => (
-                  <li key={tool} className="text-sm text-zinc-400 dark:text-zinc-500 flex items-center gap-2">
-                    <span className="h-1 w-1 rounded-full bg-zinc-300 dark:bg-zinc-600" />
-                    {tool}
-                  </li>
-                ))}
-              </ul>
-            </Link>
+            <CategoryCard key={cat.id} category={cat} />
           ))}
         </div>
       </Container>
@@ -114,33 +66,7 @@ export default function Home() {
               Our most-used utilities, ready when you are.
             </p>
           </div>
-          <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-            {[
-              { name: "JPG ⇄ PNG", cat: "Image" },
-              { name: "WebP Converter", cat: "Image" },
-              { name: "Image Compressor", cat: "Image" },
-              { name: "PDF Compressor", cat: "PDF" },
-              { name: "PDF to JPG", cat: "PDF" },
-              { name: "JSON Formatter", cat: "Code" },
-              { name: "Base64 Encode", cat: "Dev" },
-              { name: "URL Encoder", cat: "Dev" },
-              { name: "HTML Minifier", cat: "Code" },
-              { name: "Color Converter", cat: "Dev" },
-              { name: "Diff Checker", cat: "Code" },
-              { name: "UUID Generator", cat: "Dev" },
-            ].map((tool) => (
-              <Link
-                key={tool.name}
-                href="/"
-                className="group flex flex-col items-center gap-2 rounded-xl border border-zinc-200 bg-white px-4 py-5 text-center shadow-sm transition-all hover:shadow-md hover:border-blue-200 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-blue-800"
-              >
-                <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-50 group-hover:text-blue-600 dark:group-hover:text-blue-500 transition-colors">
-                  {tool.name}
-                </span>
-                <span className="text-xs text-zinc-400 dark:text-zinc-500">{tool.cat}</span>
-              </Link>
-            ))}
-          </div>
+          <ToolGrid tools={getPopularTools()} />
         </Container>
       </section>
 
@@ -230,7 +156,7 @@ export default function Home() {
             </p>
             <div className="mt-8 flex items-center justify-center gap-4">
               <Link
-                href="/"
+                href="/tools"
                 className="rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-colors"
               >
                 Browse All Tools
