@@ -5,16 +5,18 @@ import { useRef, useState } from "react";
 interface ImageUploaderProps {
   onUpload: (file: File) => void;
   disabled?: boolean;
+  accept?: string;
+  description?: string;
 }
 
 const ACCEPTED_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif", "image/bmp", "image/tiff", "image/avif"];
 
-export default function ImageUploader({ onUpload, disabled }: ImageUploaderProps) {
+export default function ImageUploader({ onUpload, disabled, accept, description }: ImageUploaderProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
 
   const handleFile = (file: File) => {
-    if (!ACCEPTED_TYPES.includes(file.type)) {
+    if (!accept?.includes("pdf") && !ACCEPTED_TYPES.includes(file.type)) {
       return;
     }
     onUpload(file);
@@ -60,7 +62,7 @@ export default function ImageUploader({ onUpload, disabled }: ImageUploaderProps
       <input
         ref={inputRef}
         type="file"
-        accept="image/*"
+        accept={accept ?? "image/*"}
         className="hidden"
         aria-hidden="true"
         tabIndex={-1}
@@ -76,9 +78,9 @@ export default function ImageUploader({ onUpload, disabled }: ImageUploaderProps
       <p className="mt-4 text-sm font-medium text-zinc-700 dark:text-zinc-300">
         {isDragging ? "Drop your image here" : "Click to upload or drag and drop"}
       </p>
-      <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-        PNG, JPG, WebP, GIF, BMP, TIFF, AVIF
-      </p>
+        <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+          {description ?? (accept?.includes("pdf") ? "PDF" : "PNG, JPG, WebP, GIF, BMP, TIFF, AVIF")}
+        </p>
     </div>
   );
 }

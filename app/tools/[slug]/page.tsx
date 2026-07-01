@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Container from "@/components/common/Container";
-import { tools, getToolBySlug } from "@/data/tools";
+import { tools, getToolBySlug } from "@/data";
 
 interface ToolPageProps {
   params: Promise<{ slug: string }>;
@@ -14,6 +14,24 @@ const DEDICATED_PAGES = new Set([
   "image-cropper", "image-rotator", "image-flipper", "image-watermark",
   "image-blur", "brightness", "contrast", "saturation",
   "grayscale", "image-sharpen",
+  "pdf-merge", "split-pdf", "pdf-compressor", "rotate-pdf",
+  "delete-pdf-pages", "extract-pdf-pages", "reorder-pdf-pages",
+  "jpg-to-pdf", "pdf-to-jpg", "pdf-metadata",
+  "qr-generator", "qr-scanner", "barcode-generator",
+  "wifi-qr", "email-qr", "sms-qr", "whatsapp-qr",
+  "vcard-qr", "location-qr", "event-qr",
+  "json-formatter", "json-validator", "json-minifier", "json-beautifier",
+  "html-formatter", "css-formatter", "js-formatter", "regex-tester",
+  "base64-encoder", "base64-decoder", "url-encoder", "url-decoder",
+  "jwt-decoder", "uuid-generator", "hash-generator",
+  "word-counter", "character-counter", "sentence-counter", "paragraph-counter",
+  "reading-time", "case-converter", "remove-duplicate-lines", "sort-lines",
+  "reverse-text", "remove-extra-spaces", "slug-generator",
+  "lorem-ipsum-generator", "random-string-generator", "unicode-converter", "text-compare",
+  "hex-to-rgb", "rgb-to-hex", "hex-to-hsl", "rgb-to-hsl",
+  "color-picker", "gradient-generator", "css-gradient-generator", "color-palette-generator",
+  "color-contrast-checker", "box-shadow-generator", "border-radius-generator",
+  "glassmorphism-generator", "neumorphism-generator", "clamp-generator", "css-unit-converter",
 ]);
 
 export async function generateStaticParams() {

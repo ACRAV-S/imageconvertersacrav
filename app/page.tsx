@@ -2,7 +2,7 @@ import Link from "next/link";
 import Container from "@/components/common/Container";
 import CategoryCard from "@/components/tools/CategoryCard";
 import ToolGrid from "@/components/tools/ToolGrid";
-import { categories, getPopularTools } from "@/data/tools";
+import { categories, getPopularTools } from "@/data";
 
 export default function Home() {
   return (

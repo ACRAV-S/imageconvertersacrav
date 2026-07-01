@@ -3,7 +3,7 @@ import Link from "next/link";
 import Container from "@/components/common/Container";
 import ToolGrid from "@/components/tools/ToolGrid";
 import CategoryCard from "@/components/tools/CategoryCard";
-import { tools, categories } from "@/data/tools";
+import { tools, categories } from "@/data";
 
 interface ToolsPageProps {
   searchParams: Promise<{ category?: string }>;

@@ -1,4 +1,4 @@
-export type ToolCategory = "image" | "pdf" | "text-code" | "developer";
+export type ToolCategory = "image" | "pdf" | "text" | "text-code" | "developer" | "qr" | "color";
 
 export interface Tool {
   id: string;

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ToolCategoryMeta, Tool } from "@/types/tool";
-import { getToolsByCategory } from "@/data/tools";
+import { getToolsByCategory } from "@/data";
 
 interface CategoryCardProps {
   category: ToolCategoryMeta;
