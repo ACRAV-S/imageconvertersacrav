@@ -1,4 +1,10 @@
+import type { Metadata } from "next";
 import Container from "@/components/common/Container";
+
+export const metadata: Metadata = {
+  title: "Terms of Service",
+  description: "Terms of service for ImageConvertersACRAV. By accessing or using our website, you agree to comply with these terms.",
+};
 
 export default function TermsPage() {
   return (

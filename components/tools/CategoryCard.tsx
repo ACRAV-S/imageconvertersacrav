@@ -14,7 +14,7 @@ export default function CategoryCard({ category }: CategoryCardProps) {
       href={`/tools?category=${category.id}`}
       className="group relative rounded-xl border border-zinc-200 bg-white p-6 shadow-sm transition-all hover:shadow-md hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700"
     >
-      <div className={`h-1.5 w-12 rounded-full bg-gradient-to-r ${category.gradient}`} />
+      <div className={`h-1.5 w-12 rounded-full bg-gradient-to-r ${category.gradient}`} aria-hidden="true" />
       <h3 className="mt-4 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
         {category.title}
       </h3>

@@ -24,9 +24,9 @@ export function formatFileSize(bytes: number): string {
 }
 
 export const FORMATS = [
-  { label: "PNG", value: "png", mime: "image/png", extension: ".png" },
-  { label: "JPG", value: "jpg", mime: "image/jpeg", extension: ".jpg" },
-  { label: "WebP", value: "webp", mime: "image/webp", extension: ".webp" },
+  { label: "PNG", value: "png", mime: "image/png", extension: ".png", desc: "Lossless, transparency" },
+  { label: "JPG", value: "jpg", mime: "image/jpeg", extension: ".jpg", desc: "Small file size" },
+  { label: "WebP", value: "webp", mime: "image/webp", extension: ".webp", desc: "Best compression" },
 ] as const;
 
 export function getFormatConfig(format: string): (typeof FORMATS)[number] | undefined {

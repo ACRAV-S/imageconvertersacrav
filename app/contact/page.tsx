@@ -1,4 +1,10 @@
+import type { Metadata } from "next";
 import Container from "@/components/common/Container";
+
+export const metadata: Metadata = {
+  title: "Contact",
+  description: "Get in touch with the ImageConvertersACRAV team. Report bugs, suggest features, or ask questions.",
+};
 
 export default function ContactPage() {
   return (

@@ -12,17 +12,25 @@ interface ImagePreviewProps {
 
 export default function ImagePreview({ src, alt = "", label, fileSize, dimensions }: ImagePreviewProps) {
   const imgRef = useRef<HTMLImageElement>(null);
+  const mountedRef = useRef(true);
   const [naturalSize, setNaturalSize] = useState({ w: 0, h: 0 });
 
   useEffect(() => {
-    if (imgRef.current) {
-      const handleLoad = () => {
-        setNaturalSize({ w: imgRef.current!.naturalWidth, h: imgRef.current!.naturalHeight });
-      };
-      imgRef.current.addEventListener("load", handleLoad);
-      if (imgRef.current.complete) handleLoad();
-      return () => imgRef.current?.removeEventListener("load", handleLoad);
-    }
+    return () => { mountedRef.current = false; };
+  }, []);
+
+  useEffect(() => {
+    const img = imgRef.current;
+    if (!img) return;
+
+    const handleLoad = () => {
+      if (mountedRef.current) {
+        setNaturalSize({ w: img.naturalWidth, h: img.naturalHeight });
+      }
+    };
+    img.addEventListener("load", handleLoad);
+    if (img.complete) handleLoad();
+    return () => img.removeEventListener("load", handleLoad);
   }, [src]);
 
   return (

@@ -1,4 +1,10 @@
+import type { Metadata } from "next";
 import Container from "@/components/common/Container";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy",
+  description: "ImageConvertersACRAV privacy policy. Your privacy is our highest priority — file transformations are processed directly in your browser.",
+};
 
 export default function PrivacyPage() {
   return (

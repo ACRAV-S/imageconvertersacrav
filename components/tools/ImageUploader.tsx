@@ -34,12 +34,23 @@ export default function ImageUploader({ onUpload, disabled }: ImageUploaderProps
 
   const handleDragLeave = () => setIsDragging(false);
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      inputRef.current?.click();
+    }
+  };
+
   return (
     <div
       onDrop={handleDrop}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onClick={() => inputRef.current?.click()}
+      onKeyDown={handleKeyDown}
+      role="button"
+      tabIndex={disabled ? -1 : 0}
+      aria-label="Upload an image"
       className={`cursor-pointer rounded-xl border-2 border-dashed p-12 text-center transition-colors ${
         isDragging
           ? "border-blue-500 bg-blue-50 dark:border-blue-400 dark:bg-blue-950/30"
@@ -51,6 +62,8 @@ export default function ImageUploader({ onUpload, disabled }: ImageUploaderProps
         type="file"
         accept="image/*"
         className="hidden"
+        aria-hidden="true"
+        tabIndex={-1}
         onChange={(e) => {
           const file = e.target.files?.[0];
           if (file) handleFile(file);

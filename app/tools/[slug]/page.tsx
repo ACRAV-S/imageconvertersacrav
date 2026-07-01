@@ -7,8 +7,19 @@ interface ToolPageProps {
   params: Promise<{ slug: string }>;
 }
 
+const DEDICATED_PAGES = new Set([
+  "image-converter", "jpg-to-png", "png-to-jpg", "png-to-webp",
+  "webp-to-png", "jpg-to-webp", "webp-to-jpg", "bmp-to-png",
+  "gif-to-png", "image-resizer", "image-compressor",
+  "image-cropper", "image-rotator", "image-flipper", "image-watermark",
+  "image-blur", "brightness", "contrast", "saturation",
+  "grayscale", "image-sharpen",
+]);
+
 export async function generateStaticParams() {
-  return tools.map((tool) => ({ slug: tool.slug }));
+  return tools
+    .filter((tool) => !DEDICATED_PAGES.has(tool.slug))
+    .map((tool) => ({ slug: tool.slug }));
 }
 
 export async function generateMetadata({ params }: ToolPageProps) {

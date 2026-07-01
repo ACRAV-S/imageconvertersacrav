@@ -1,4 +1,10 @@
+import type { Metadata } from "next";
 import Container from "@/components/common/Container";
+
+export const metadata: Metadata = {
+  title: "Disclaimer",
+  description: "Disclaimer for ImageConvertersACRAV tools and services. Services are provided on an 'as is' basis without warranties.",
+};
 
 export default function DisclaimerPage() {
   return (
