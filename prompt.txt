@@ -1,0 +1,11 @@
+Analyze this existing Next.js project.
+
+Do not modify any files.
+
+Tell me:
+
+1. Current project structure
+2. Missing folders
+3. Best architecture for a production online tools website
+
+Wait for my approval before making any changes.
