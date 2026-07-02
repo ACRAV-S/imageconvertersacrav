@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import TextToolShell from "@/components/tools/text/TextToolShell";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "Unicode Converter - Encode/Decode Unicode Online | ImageConvertersACRAV",
@@ -14,7 +15,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <TextToolShell
+    <ToolErrorBoundary>
+      <TextToolShell
       title="Unicode Converter"
       description="Convert text to Unicode escape sequences and decode Unicode escapes back to readable characters."
       mode="unicode-convert"
@@ -37,5 +39,6 @@ export default function Page() {
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

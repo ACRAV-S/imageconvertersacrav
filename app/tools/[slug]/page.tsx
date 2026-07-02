@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Container from "@/components/common/Container";
@@ -32,6 +33,10 @@ const DEDICATED_PAGES = new Set([
   "color-picker", "gradient-generator", "css-gradient-generator", "color-palette-generator",
   "color-contrast-checker", "box-shadow-generator", "border-radius-generator",
   "glassmorphism-generator", "neumorphism-generator", "clamp-generator", "css-unit-converter",
+  "age-calculator", "bmi-calculator", "percentage-calculator", "percentage-change-calculator",
+  "gst-calculator", "discount-calculator", "emi-calculator", "loan-calculator",
+  "scientific-calculator", "date-difference-calculator", "time-duration-calculator",
+  "unit-converter", "binary-calculator", "tip-calculator", "fuel-cost-calculator",
 ]);
 
 export async function generateStaticParams() {
@@ -40,13 +45,28 @@ export async function generateStaticParams() {
     .map((tool) => ({ slug: tool.slug }));
 }
 
-export async function generateMetadata({ params }: ToolPageProps) {
+export async function generateMetadata({ params }: ToolPageProps): Promise<Metadata> {
   const { slug } = await params;
   const tool = getToolBySlug(slug);
-  if (!tool) return {};
+  if (!tool) return { title: "Tool Not Found" };
   return {
     title: tool.title,
     description: tool.description,
+    keywords: tool.keywords,
+    alternates: { canonical: `/tools/${slug}` },
+    openGraph: {
+      title: tool.title,
+      description: tool.description,
+      url: `/tools/${slug}`,
+      siteName: "ImageConvertersACRAV",
+      locale: "en_US",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: tool.title,
+      description: tool.description,
+    },
   };
 }
 

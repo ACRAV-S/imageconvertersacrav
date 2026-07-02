@@ -1,14 +1,21 @@
 import type { Metadata } from "next";
 import ImageResizerTool from "@/components/tools/ImageResizerTool";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
-  title: "Image Resizer",
+  title: "Image Resizer — Resize Images to Exact Dimensions Online",
   description: "Resize images to exact dimensions online. Free, fast, and private — all in your browser. Supports PNG, JPG, and WebP output.",
+  keywords: ["image resizer", "resize image", "image dimensions", "photo resizer", "free image resizer"],
+  openGraph: {
+    title: "Image Resizer — Resize Images to Exact Dimensions Online",
+    description: "Resize images to exact dimensions online. Free, fast, and private.",
+  },
 };
 
 export default function ImageResizerPage() {
   return (
-    <ImageResizerTool
+    <ToolErrorBoundary>
+      <ImageResizerTool
       faqs={[
         {
           question: "Can I resize to any dimension?",
@@ -28,5 +35,6 @@ export default function ImageResizerPage() {
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

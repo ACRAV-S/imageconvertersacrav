@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import CodeToolShell from "@/components/tools/dev/CodeToolShell";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "JSON Formatter",
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <CodeToolShell
+    <ToolErrorBoundary>
+      <CodeToolShell
       title="JSON Formatter"
       description="Format your JSON data with proper indentation and line breaks. Paste your JSON, click Transform, and get beautifully formatted output."
       mode="json-format"
@@ -19,5 +21,6 @@ export default function Page() {
         { question: "What if I get an error?", answer: "The tool will show a descriptive error message if your JSON is invalid, helping you find and fix syntax issues." },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

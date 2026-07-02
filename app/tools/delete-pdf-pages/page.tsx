@@ -1,33 +1,48 @@
 import type { Metadata } from "next";
-import PdfUnavailableTool from "@/components/tools/pdf/PdfUnavailableTool";
+import PdfDeletePagesTool from "@/components/tools/pdf/PdfDeletePagesTool";
+import { SITE_URL } from "@/lib/constants/site";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "Delete PDF Pages",
-  description: "Remove unwanted pages from PDF files online. Delete specific pages or ranges with ease. Free and private.",
+  description:
+    "Remove unwanted pages from PDF files online. Select pages to delete with visual previews. Free, fast, and private — all in your browser.",
+  alternates: { canonical: `${SITE_URL}/tools/delete-pdf-pages` },
+  openGraph: {
+    title: "Delete PDF Pages Online Free | ImageConvertersACRAV",
+    description:
+      "Remove unwanted pages from your PDF documents. Select specific pages to delete with visual previews. All processing happens in your browser.",
+    url: `${SITE_URL}/tools/delete-pdf-pages`,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Delete PDF Pages Online Free | ImageConvertersACRAV",
+    description:
+      "Remove unwanted pages from your PDF documents. Select specific pages to delete with visual previews.",
+  },
 };
 
 export default function DeletePdfPagesPage() {
   return (
-    <PdfUnavailableTool
+    <ToolErrorBoundary>
+      <PdfDeletePagesTool
       title="Delete PDF Pages"
-      description="Remove unwanted pages from your PDF document."
-      operation="delete pages from a PDF"
-      reason="Deleting pages requires modifying the PDF page tree, removing page objects, updating the cross-reference table, and optionally cleaning up orphaned resources. Browser APIs provide no PDF parsing or structure modification capabilities."
-      api="pdf-lib (PDFDocument.load, removePage, save)"
+      description="Remove unwanted pages from your PDF document. Select pages from the visual preview grid to delete. All processing happens in your browser — nothing is uploaded."
       faqs={[
         {
-          question: "Why can't pages be deleted natively?",
-          answer: "A PDF's page tree is a hierarchical structure. Removing a page involves updating parent references, potentially removing resource references, and rebuilding the document structure. Without a PDF parser, this is impossible from JavaScript.",
+          question: "How does page deletion work?",
+          answer: "The tool uses pdf-lib to remove selected pages from the PDF page tree. All internal references are updated, resulting in a valid PDF with only the remaining pages.",
         },
         {
-          question: "How would deletion work with a library?",
-          answer: "pdf-lib provides removePage() which handles all the internal bookkeeping — updating the page tree, cleaning up references, and saving a valid PDF — all client-side.",
+          question: "Can I delete multiple pages at once?",
+          answer: "Yes. Select all the pages you want to remove using the page preview grid, then click the delete button.",
         },
         {
           question: "Is my data safe?",
-          answer: "This tool runs entirely in your browser. No files are uploaded anywhere. Once a PDF library is integrated, page deletion will also be fully client-side.",
+          answer: "Absolutely. All processing is done in your browser using client-side JavaScript. Your files never leave your device.",
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

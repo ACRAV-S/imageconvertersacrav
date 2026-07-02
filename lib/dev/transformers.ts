@@ -97,7 +97,7 @@ export function formatHtml(input: string): string {
   let depth = 0;
   const out: string[] = [];
   const tokens = input.replace(/>\s*</g, ">\n<").split("\n");
-  for (let token of tokens) {
+  for (const token of tokens) {
     const trimmed = token.trim();
     if (!trimmed) continue;
     const isClose = /^<\//.test(trimmed);

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import ClampGeneratorTool from "@/components/tools/color/ClampGeneratorTool";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "CSS Clamp Generator - Generate Fluid Typography Online | ImageConvertersACRAV",
@@ -9,7 +10,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <ClampGeneratorTool
+    <ToolErrorBoundary>
+      <ClampGeneratorTool
       title="CSS Clamp Generator"
       description="Generate fluid typography with CSS clamp(). Set min/max sizes and viewport ranges for responsive text."
       faqs={[
@@ -19,5 +21,6 @@ export default function Page() {
         { question: "Is this tool free and secure?", answer: "Yes. All calculations are client-side and private." },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

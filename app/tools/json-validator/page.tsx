@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import CodeToolShell from "@/components/tools/dev/CodeToolShell";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "JSON Validator",
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <CodeToolShell
+    <ToolErrorBoundary>
+      <CodeToolShell
       title="JSON Validator"
       description="Check if your JSON is syntactically correct. Get detailed error messages with line numbers to quickly find and fix issues."
       mode="json-validate"
@@ -17,5 +19,6 @@ export default function Page() {
         { question: "Is my data sent to a server?", answer: "Never. Everything runs in your browser." },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

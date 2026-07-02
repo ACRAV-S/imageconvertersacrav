@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import ImageToolShell from "@/components/tools/ImageToolShell";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "BMP to PNG Converter",
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
 
 export default function BmpToPngPage() {
   return (
-    <ImageToolShell
+    <ToolErrorBoundary>
+      <ImageToolShell
       title="BMP to PNG"
       description="Convert BMP (Bitmap) images to the more efficient PNG format. PNG compresses BMP files significantly while preserving all visual quality and supporting transparency. All processing runs in your browser."
       acceptedFormats={["image/bmp"]}
@@ -32,5 +34,6 @@ export default function BmpToPngPage() {
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

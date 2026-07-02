@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import FilterToolShell from "@/components/tools/FilterToolShell";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "Brightness Adjuster",
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
 
 export default function BrightnessPage() {
   return (
-    <FilterToolShell
+    <ToolErrorBoundary>
+      <FilterToolShell
       title="Brightness Adjuster"
       description="Adjust the brightness of your image. Move the slider right to lighten, left to darken. All processing happens in your browser."
       filterType="brightness"
@@ -34,5 +36,6 @@ export default function BrightnessPage() {
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

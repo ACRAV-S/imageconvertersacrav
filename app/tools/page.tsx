@@ -1,9 +1,20 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
 import Container from "@/components/common/Container";
 import ToolGrid from "@/components/tools/ToolGrid";
 import CategoryCard from "@/components/tools/CategoryCard";
 import { tools, categories } from "@/data";
+
+export const metadata: Metadata = {
+  title: "All Tools",
+  description: "Browse our collection of free online tools for image conversion, PDF manipulation, color utilities, QR codes, calculators, and more.",
+  keywords: ["online tools", "free tools", "image converter", "PDF tools", "color picker", "QR code generator", "calculator"],
+  openGraph: {
+    title: "All Tools — ImageConvertersACRAV",
+    description: "Browse our collection of free online tools for image conversion, PDF manipulation, color utilities, QR codes, calculators, and more.",
+  },
+};
 
 interface ToolsPageProps {
   searchParams: Promise<{ category?: string }>;

@@ -1,12 +1,46 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Container from "@/components/common/Container";
 import CategoryCard from "@/components/tools/CategoryCard";
 import ToolGrid from "@/components/tools/ToolGrid";
 import { categories, getPopularTools } from "@/data";
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://imageconvertersacrav.vercel.app";
+
+export const metadata: Metadata = {
+  title: "Free Online Image Converter & Utility Tools",
+  description:
+    "Convert images, compress PDFs, format code, and more. 100+ free online tools — all processing runs client-side. Your files never leave your device.",
+  openGraph: {
+    title: "ImageConvertersACRAV - Free Online Tools",
+    description:
+      "Convert images, compress PDFs, format code, and more. 100+ free online tools — all processing runs client-side.",
+    url: SITE_URL,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ImageConvertersACRAV - Free Online Tools",
+    description:
+      "Convert images, compress PDFs, format code, and more. 100+ free online tools — all processing runs client-side.",
+  },
+};
+
 export default function Home() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "ImageConvertersACRAV",
+    url: SITE_URL,
+    description: "Free online image converter, PDF tools, text utilities, and developer tools. Fast, private, client-side processing.",
+  };
+
   return (
-    <div className="flex-1 flex flex-col">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="flex-1 flex flex-col">
       <section className="relative overflow-hidden border-b border-zinc-100 dark:border-zinc-800">
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(45%_35%_at_50%_0%,rgba(59,130,246,0.08),transparent)] dark:bg-[radial-gradient(45%_35%_at_50%_0%,rgba(59,130,246,0.12),transparent)]" />
         <Container className="py-20 sm:py-28 lg:py-36">
@@ -172,5 +206,6 @@ export default function Home() {
         </Container>
       </section>
     </div>
+    </>
   );
 }

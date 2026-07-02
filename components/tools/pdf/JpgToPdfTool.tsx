@@ -8,11 +8,9 @@ import DownloadButton from "@/components/tools/DownloadButton";
 import ProcessingLoader from "@/components/tools/ProcessingLoader";
 import { formatFileSize } from "@/lib/image/imageUtils";
 import { convertJpegToPdf } from "@/lib/pdf/pdfBuilder";
-
-interface FaqItem {
-  question: string;
-  answer: string;
-}
+import ErrorAlert from "@/components/tools/ErrorAlert";
+import FaqSection from "@/components/tools/FaqSection";
+import type { FaqItem } from "@/components/tools/FaqSection";
 
 interface JpgToPdfToolProps {
   title: string;
@@ -85,11 +83,7 @@ export default function JpgToPdfTool({ title, description, faqs }: JpgToPdfToolP
         </p>
       </div>
 
-      {error && (
-        <div className="mt-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-950/50 dark:text-red-400">
-          {error}
-        </div>
-      )}
+      <ErrorAlert error={error} />
 
       <div className="mt-8 space-y-6">
         {files.length === 0 && !resultBlob ? (
@@ -164,19 +158,7 @@ export default function JpgToPdfTool({ title, description, faqs }: JpgToPdfToolP
         </div>
       )}
 
-      <section className="mt-16 border-t border-zinc-100 pt-12 dark:border-zinc-800">
-        <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-          Frequently Asked Questions
-        </h2>
-        <div className="mt-8 space-y-6">
-          {faqs.map((faq, i) => (
-            <div key={i}>
-              <h3 className="font-semibold text-zinc-900 dark:text-zinc-50">{faq.question}</h3>
-              <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">{faq.answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      <FaqSection faqs={faqs} />
     </Container>
   );
 }

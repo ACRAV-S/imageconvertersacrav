@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import TextToolShell from "@/components/tools/text/TextToolShell";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "Sort Lines - Alphabetize Text Online | ImageConvertersACRAV",
@@ -14,7 +15,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <TextToolShell
+    <ToolErrorBoundary>
+      <TextToolShell
       title="Sort Lines"
       description="Sort lines alphabetically in ascending or descending order. Quick and easy text organization."
       mode="sort-lines"
@@ -37,5 +39,6 @@ export default function Page() {
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

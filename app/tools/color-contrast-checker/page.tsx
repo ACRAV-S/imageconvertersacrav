@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import ColorContrastTool from "@/components/tools/color/ColorContrastTool";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "Color Contrast Checker (WCAG) - Check Contrast Online | ImageConvertersACRAV",
@@ -9,7 +10,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <ColorContrastTool
+    <ToolErrorBoundary>
+      <ColorContrastTool
       title="Color Contrast Checker (WCAG)"
       description="Check color contrast ratios against WCAG standards. Ensure your designs meet accessibility requirements."
       faqs={[
@@ -19,5 +21,6 @@ export default function Page() {
         { question: "Is this tool free and secure?", answer: "Yes. All contrast calculations happen in your browser. No color data is sent anywhere." },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

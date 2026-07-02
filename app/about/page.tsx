@@ -1,9 +1,22 @@
 import type { Metadata } from "next";
 import Container from "@/components/common/Container";
 
+const siteUrl = "https://imageconvertersacrav.vercel.app";
+
 export const metadata: Metadata = {
   title: "About",
   description: "Learn about ImageConvertersacrav — a fast, private, and free online tools platform. All processing runs client-side in your browser.",
+  alternates: { canonical: `${siteUrl}/about` },
+  openGraph: {
+    title: "About | ImageConvertersACRAV",
+    description: "Learn about ImageConvertersacrav — a fast, private, and free online tools platform.",
+    url: `${siteUrl}/about`,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About | ImageConvertersACRAV",
+    description: "Learn about ImageConvertersacrav — a fast, private, and free online tools platform.",
+  },
 };
 
 export default function AboutPage() {

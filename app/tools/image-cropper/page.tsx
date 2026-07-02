@@ -1,14 +1,21 @@
 import type { Metadata } from "next";
 import CropTool from "@/components/tools/CropTool";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
-  title: "Image Cropper",
+  title: "Image Cropper — Crop Images to Any Size Online",
   description: "Crop images to any size online. Remove unwanted areas and focus on what matters. Free, private, and runs in your browser.",
+  keywords: ["image cropper", "crop image", "photo cropper", "crop tool", "free image cropper"],
+  openGraph: {
+    title: "Image Cropper — Crop Images to Any Size Online",
+    description: "Crop images to any size online. Remove unwanted areas and focus on what matters. Free, private.",
+  },
 };
 
 export default function ImageCropperPage() {
   return (
-    <CropTool
+    <ToolErrorBoundary>
+      <CropTool
       title="Image Cropper"
       description="Crop your images to any size. Adjust the crop area using the controls below. All processing happens in your browser."
       faqs={[
@@ -30,5 +37,6 @@ export default function ImageCropperPage() {
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

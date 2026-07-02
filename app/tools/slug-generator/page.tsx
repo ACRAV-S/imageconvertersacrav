@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import TextToolShell from "@/components/tools/text/TextToolShell";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "Slug Generator - Create URL Slugs Online | ImageConvertersACRAV",
@@ -14,7 +15,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <TextToolShell
+    <ToolErrorBoundary>
+      <TextToolShell
       title="Slug Generator"
       description="Generate URL-friendly slugs from any text. Perfect for blog posts, pages, and SEO-friendly URLs."
       mode="slug"
@@ -37,5 +39,6 @@ export default function Page() {
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

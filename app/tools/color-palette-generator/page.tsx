@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import ColorPaletteTool from "@/components/tools/color/ColorPaletteTool";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "Color Palette Generator - Create Color Schemes Online | ImageConvertersACRAV",
@@ -9,7 +10,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <ColorPaletteTool
+    <ToolErrorBoundary>
+      <ColorPaletteTool
       title="Color Palette Generator"
       description="Generate harmonious color palettes from any seed color. Get monochrome, complementary, analogous, and triadic schemes."
       faqs={[
@@ -19,5 +21,6 @@ export default function Page() {
         { question: "Is this tool free and secure?", answer: "Yes. All palette generation is client-side and private." },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

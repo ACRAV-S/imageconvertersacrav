@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import CssGeneratorShell from "@/components/tools/color/CssGeneratorShell";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "Box Shadow Generator - Create CSS Shadows Online | ImageConvertersACRAV",
@@ -9,7 +10,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <CssGeneratorShell
+    <ToolErrorBoundary>
+      <CssGeneratorShell
       title="Box Shadow Generator"
       description="Create beautiful box shadows with interactive controls. Customize offset, blur, spread, and color with live preview."
       mode="box-shadow"
@@ -20,5 +22,6 @@ export default function Page() {
         { question: "Is this tool free and secure?", answer: "Yes. All processing is client-side and private." },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

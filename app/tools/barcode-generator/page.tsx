@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import BarcodeGeneratorTool from "@/components/tools/qr/BarcodeGeneratorTool";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "Barcode Generator",
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
 
 export default function BarcodeGeneratorPage() {
   return (
-    <BarcodeGeneratorTool
+    <ToolErrorBoundary>
+      <BarcodeGeneratorTool
       title="Barcode Generator"
       description="Generate Code 128 barcodes from any text. Enter your content and get a printable barcode instantly. Download as PNG or copy the encoded text."
       faqs={[
@@ -30,5 +32,6 @@ export default function BarcodeGeneratorPage() {
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

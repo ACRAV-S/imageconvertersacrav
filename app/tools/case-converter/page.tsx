@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import TextToolShell from "@/components/tools/text/TextToolShell";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "Case Converter - Convert Text Case Online | ImageConvertersACRAV",
@@ -14,7 +15,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <TextToolShell
+    <ToolErrorBoundary>
+      <TextToolShell
       title="Case Converter"
       description="Convert text between lowercase, UPPERCASE, Title Case, Sentence case, camelCase, PascalCase, snake_case, and kebab-case."
       mode="case-convert"
@@ -37,5 +39,6 @@ export default function Page() {
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

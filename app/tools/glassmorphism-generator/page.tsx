@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import CssGeneratorShell from "@/components/tools/color/CssGeneratorShell";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "Glassmorphism Generator - Create Glass Effect Online | ImageConvertersACRAV",
@@ -9,7 +10,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <CssGeneratorShell
+    <ToolErrorBoundary>
+      <CssGeneratorShell
       title="Glassmorphism Generator"
       description="Create glassmorphism effects with backdrop blur, transparency, and shadow controls. Copy ready CSS."
       mode="glassmorphism"
@@ -20,5 +22,6 @@ export default function Page() {
         { question: "Is this tool free and secure?", answer: "Yes. All generation is client-side and private." },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

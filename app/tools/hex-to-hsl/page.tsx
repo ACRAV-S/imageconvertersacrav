@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import ColorToolShell from "@/components/tools/color/ColorToolShell";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "HEX to HSL Converter - Convert Hex to HSL Online | ImageConvertersACRAV",
@@ -9,7 +10,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <ColorToolShell
+    <ToolErrorBoundary>
+      <ColorToolShell
       title="HEX to HSL Converter"
       description="Convert HEX color codes to HSL values for intuitive color manipulation."
       mode="hex-to-hsl"
@@ -20,5 +22,6 @@ export default function Page() {
         { question: "Is this tool free and secure?", answer: "Yes. All conversion happens in your browser. Your data is never sent to any server." },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

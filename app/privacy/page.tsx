@@ -1,9 +1,22 @@
 import type { Metadata } from "next";
 import Container from "@/components/common/Container";
 
+const siteUrl = "https://imageconvertersacrav.vercel.app";
+
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description: "ImageConvertersACRAV privacy policy. Your privacy is our highest priority — file transformations are processed directly in your browser.",
+  alternates: { canonical: `${siteUrl}/privacy` },
+  openGraph: {
+    title: "Privacy Policy | ImageConvertersACRAV",
+    description: "ImageConvertersACRAV privacy policy — file transformations are processed directly in your browser.",
+    url: `${siteUrl}/privacy`,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Privacy Policy | ImageConvertersACRAV",
+    description: "ImageConvertersACRAV privacy policy.",
+  },
 };
 
 export default function PrivacyPage() {

@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
 import Container from "@/components/common/Container";
 import { generateBoxShadowCss, generateBorderRadiusCss, generateGlassmorphismCss, generateNeumorphismCss } from "@/lib/color/colorUtils";
-
-interface FaqItem { question: string; answer: string; }
+import ErrorAlert from "@/components/tools/ErrorAlert";
+import FaqSection, { FaqItem } from "@/components/tools/FaqSection";
 
 type CssGenMode = "box-shadow" | "border-radius" | "glassmorphism" | "neumorphism";
 
@@ -15,8 +16,17 @@ interface CssGeneratorShellProps {
   mode: CssGenMode;
 }
 
+const Slider = ({ label, value, min, max, step, onChange }: { label: string; value: number; min: number; max: number; step: number; onChange: (v: number) => void }) => (
+  <div>
+    <label className="flex justify-between text-xs text-zinc-500 dark:text-zinc-400 mb-1">
+      <span>{label}</span><span className="font-mono">{value}</span>
+    </label>
+    <input type="range" min={min} max={max} step={step} value={value} onChange={(e) => onChange(Number(e.target.value))} className="w-full" />
+  </div>
+);
+
 export default function CssGeneratorShell({ title, description, faqs, mode }: CssGeneratorShellProps) {
-  const [copied, setCopied] = useState(false);
+  const { copied, copy: handleCopy } = useCopyToClipboard();
 
   const boxShadowState = useState({ inset: false, offsetX: 4, offsetY: 4, blur: 10, spread: 0, color: "#00000040" });
   const [bs, setBs] = boxShadowState;
@@ -45,7 +55,13 @@ export default function CssGeneratorShell({ title, description, faqs, mode }: Cs
   }, [mode, bs, br, gl, nm]);
 
   const previewStyle: Record<string, string> = {};
-  if (mode === "box-shadow") { previewStyle.boxShadow = generateBoxShadowCss(bs); previewStyle.borderRadius = "12px"; previewStyle.width = "150px"; previewStyle.height = "150px"; previewStyle.background = "white"; }
+  if (mode === "box-shadow") {
+    previewStyle.boxShadow = generateBoxShadowCss(bs);
+    previewStyle.borderRadius = "12px";
+    previewStyle.width = "150px";
+    previewStyle.height = "150px";
+    previewStyle.background = "white";
+  }
   if (mode === "border-radius") { previewStyle.borderRadius = generateBorderRadiusCss(br); previewStyle.width = "150px"; previewStyle.height = "150px"; previewStyle.background = "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"; }
   if (mode === "glassmorphism") {
     previewStyle.background = `rgba(255, 255, 255, ${gl.backgroundOpacity})`;
@@ -70,26 +86,12 @@ export default function CssGeneratorShell({ title, description, faqs, mode }: Cs
     previewStyle.width = "150px"; previewStyle.height = "150px";
   }
 
-  const handleCopy = async () => {
-    try { await navigator.clipboard.writeText(getCss()); setCopied(true); setTimeout(() => setCopied(false), 2000); }
-    catch {}
-  };
-
   const handleReset = () => {
     setBs({ inset: false, offsetX: 4, offsetY: 4, blur: 10, spread: 0, color: "#00000040" });
     setBr({ topLeft: 10, topRight: 10, bottomRight: 10, bottomLeft: 10, unit: "px" });
     setGl({ backgroundOpacity: 0.15, blur: 10, saturation: 180, borderOpacity: 0.3, borderRadius: 12, shadowBlur: 30 });
     setNm({ baseColor: "#e0e0e0", borderRadius: 12, shadowBlur: 20, distance: 5, intensity: 0.8, inset: false });
   };
-
-  const Slider = ({ label, value, min, max, step, onChange }: { label: string; value: number; min: number; max: number; step: number; onChange: (v: number) => void }) => (
-    <div>
-      <label className="flex justify-between text-xs text-zinc-500 dark:text-zinc-400 mb-1">
-        <span>{label}</span><span className="font-mono">{value}</span>
-      </label>
-      <input type="range" min={min} max={max} step={step} value={value} onChange={(e) => onChange(Number(e.target.value))} className="w-full" />
-    </div>
-  );
 
   return (
     <Container className="py-12">
@@ -176,18 +178,13 @@ export default function CssGeneratorShell({ title, description, faqs, mode }: Cs
         <div className="rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">CSS Code</h3>
-            <button onClick={handleCopy} className="text-xs text-blue-600 hover:text-blue-500 dark:text-blue-400">{copied ? "Copied!" : "Copy CSS"}</button>
+            <button onClick={() => handleCopy(getCss())} className="text-xs text-blue-600 hover:text-blue-500 dark:text-blue-400">{copied ? "Copied!" : "Copy CSS"}</button>
           </div>
           <pre className="rounded-lg bg-zinc-50 p-3 text-xs font-mono text-zinc-800 dark:bg-zinc-950 dark:text-zinc-200 overflow-x-auto whitespace-pre-wrap">{getCss()}</pre>
         </div>
       </div>
 
-      <section className="mt-16 border-t border-zinc-100 pt-12 dark:border-zinc-800">
-        <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">Frequently Asked Questions</h2>
-        <div className="mt-8 space-y-6">{faqs.map((faq, i) => (
-          <div key={i}><h3 className="font-semibold text-zinc-900 dark:text-zinc-50">{faq.question}</h3><p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">{faq.answer}</p></div>
-        ))}</div>
-      </section>
+      <FaqSection faqs={faqs} />
     </Container>
   );
 }

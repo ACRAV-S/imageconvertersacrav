@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import GradientTool from "@/components/tools/color/GradientTool";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "CSS Gradient Generator - Generate Gradient CSS Online | ImageConvertersACRAV",
@@ -9,7 +10,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <GradientTool
+    <ToolErrorBoundary>
+      <GradientTool
       title="CSS Gradient Generator"
       description="Generate CSS gradient code with visual preview. Copy ready-to-use linear, radial, and conic gradient CSS."
       emphasizeCss
@@ -20,5 +22,6 @@ export default function Page() {
         { question: "Is this tool free and secure?", answer: "Yes. All generation happens client-side. No data is sent to any server." },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

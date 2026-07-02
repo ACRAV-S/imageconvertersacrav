@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import ColorPickerTool from "@/components/tools/color/ColorPickerTool";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "Color Picker - Pick Colors Online | ImageConvertersACRAV",
@@ -9,7 +10,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <ColorPickerTool
+    <ToolErrorBoundary>
+      <ColorPickerTool
       title="Color Picker"
       description="Pick colors visually and get instant HEX, RGB, and HSL values. Explore and copy color codes with one click."
       faqs={[
@@ -19,5 +21,6 @@ export default function Page() {
         { question: "Is this tool free and secure?", answer: "Yes. All color processing is done locally in your browser. No data is sent to any server." },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

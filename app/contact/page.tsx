@@ -1,9 +1,22 @@
 import type { Metadata } from "next";
 import Container from "@/components/common/Container";
 
+const siteUrl = "https://imageconvertersacrav.vercel.app";
+
 export const metadata: Metadata = {
   title: "Contact",
   description: "Get in touch with the ImageConvertersACRAV team. Report bugs, suggest features, or ask questions.",
+  alternates: { canonical: `${siteUrl}/contact` },
+  openGraph: {
+    title: "Contact | ImageConvertersACRAV",
+    description: "Get in touch with the ImageConvertersACRAV team.",
+    url: `${siteUrl}/contact`,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Contact | ImageConvertersACRAV",
+    description: "Get in touch with the ImageConvertersACRAV team.",
+  },
 };
 
 export default function ContactPage() {

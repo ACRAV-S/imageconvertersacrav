@@ -5,6 +5,7 @@ import { qrTools } from "./qr-tools";
 import { textTools } from "./text-tools";
 import { developerTools } from "./developer-tools";
 import { colorTools } from "./color-tools";
+import { calculatorTools } from "./calculator-tools";
 
 export const tools: Tool[] = [
   ...imageTools,
@@ -13,9 +14,16 @@ export const tools: Tool[] = [
   ...textTools,
   ...developerTools,
   ...colorTools,
+  ...calculatorTools,
 ];
 
 export const categories: ToolCategoryMeta[] = [
+  {
+    id: "calculator",
+    title: "Calculator Tools",
+    description: "Perform calculations, convert units, and solve math problems instantly.",
+    gradient: "from-sky-500 to-blue-500",
+  },
   {
     id: "color",
     title: "Color & CSS Tools",

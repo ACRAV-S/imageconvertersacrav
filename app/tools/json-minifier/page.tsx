@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import CodeToolShell from "@/components/tools/dev/CodeToolShell";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "JSON Minifier",
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <CodeToolShell
+    <ToolErrorBoundary>
+      <CodeToolShell
       title="JSON Minifier"
       description="Remove all unnecessary whitespace from your JSON to reduce its file size. Perfect for API payloads and data transfer."
       mode="json-minify"
@@ -17,5 +19,6 @@ export default function Page() {
         { question: "Is my data sent to a server?", answer: "Never. Everything runs in your browser." },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

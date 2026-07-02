@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import ColorToolShell from "@/components/tools/color/ColorToolShell";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "RGB to HSL Converter - Convert RGB to HSL Online | ImageConvertersACRAV",
@@ -9,7 +10,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <ColorToolShell
+    <ToolErrorBoundary>
+      <ColorToolShell
       title="RGB to HSL Converter"
       description="Convert RGB color values to HSL format. Understand color in terms of hue, saturation, and lightness."
       mode="rgb-to-hsl"
@@ -20,5 +22,6 @@ export default function Page() {
         { question: "Is this tool free and secure?", answer: "Yes. All processing is client-side. No data is uploaded." },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

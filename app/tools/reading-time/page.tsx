@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import TextToolShell from "@/components/tools/text/TextToolShell";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "Reading Time Calculator - Estimate Reading Time | ImageConvertersACRAV",
@@ -14,7 +15,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <TextToolShell
+    <ToolErrorBoundary>
+      <TextToolShell
       title="Reading Time Calculator"
       description="Calculate how long it takes to read any text. Get estimated reading and speaking times instantly."
       mode="reading-time"
@@ -37,5 +39,6 @@ export default function Page() {
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

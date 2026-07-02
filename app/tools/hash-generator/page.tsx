@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import HashGeneratorTool from "@/components/tools/dev/HashGeneratorTool";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "Hash Generator (SHA-256)",
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <HashGeneratorTool
+    <ToolErrorBoundary>
+      <HashGeneratorTool
       title="Hash Generator (SHA-256)"
       description="Generate SHA-256 hashes from any text input using the browser's built-in Web Crypto API. SHA-256 is a cryptographic hash function that produces a 64-character hex string."
       faqs={[
@@ -17,5 +19,6 @@ export default function Page() {
         { question: "Is my data sent to a server?", answer: "Never. The hashing is done entirely in your browser using the Web Crypto API. Your input never leaves your device." },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

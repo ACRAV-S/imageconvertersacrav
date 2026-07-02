@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import QrGeneratorShell from "@/components/tools/qr/QrGeneratorShell";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "WiFi QR Generator",
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
 
 export default function WifiQrPage() {
   return (
-    <QrGeneratorShell
+    <ToolErrorBoundary>
+      <QrGeneratorShell
       title="WiFi QR Generator"
       description="Create a QR code that lets anyone connect to your WiFi network by scanning. Enter your network name (SSID), password, and security type."
       fields={[
@@ -36,5 +38,6 @@ export default function WifiQrPage() {
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

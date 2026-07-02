@@ -1,13 +1,11 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
+import ErrorAlert from "@/components/tools/ErrorAlert";
+import FaqSection, { FaqItem } from "@/components/tools/FaqSection";
 import Container from "@/components/common/Container";
 import { computeDiff, type DiffLine } from "@/lib/text/textTools";
-
-interface FaqItem {
-  question: string;
-  answer: string;
-}
 
 interface TextCompareToolProps {
   title: string;
@@ -20,7 +18,7 @@ export default function TextCompareTool({ title, description, faqs }: TextCompar
   const [newText, setNewText] = useState("");
   const [diff, setDiff] = useState<DiffLine[] | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
+  const { copied, copy: handleCopy } = useCopyToClipboard();
 
   const handleCompare = useCallback(() => {
     if (!oldText.trim() && !newText.trim()) {
@@ -35,20 +33,6 @@ export default function TextCompareTool({ title, description, faqs }: TextCompar
       setError((e as Error).message);
     }
   }, [oldText, newText]);
-
-  const handleCopy = async () => {
-    if (!diff) return;
-    const text = diff
-      .map((l) => `${l.type === "added" ? "+ " : l.type === "removed" ? "- " : "  "}${l.text}`)
-      .join("\n");
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      setError("Failed to copy.");
-    }
-  };
 
   const handleDownload = useCallback(() => {
     if (!diff) return;
@@ -92,11 +76,7 @@ export default function TextCompareTool({ title, description, faqs }: TextCompar
         <p className="mt-2 text-zinc-600 dark:text-zinc-400">{description}</p>
       </div>
 
-      {error && (
-        <div className="mt-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-950/50 dark:text-red-400">
-          {error}
-        </div>
-      )}
+      <ErrorAlert error={error} />
 
       <div className="mt-8 space-y-4">
         <div className="rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
@@ -160,7 +140,7 @@ export default function TextCompareTool({ title, description, faqs }: TextCompar
                 </span>
               </h3>
               <div className="flex gap-2">
-                <button onClick={handleCopy} className="text-xs text-blue-600 hover:text-blue-500 dark:text-blue-400">
+                <button onClick={() => handleCopy(diff.map((l) => `${l.type === "added" ? "+ " : l.type === "removed" ? "- " : "  "}${l.text}`).join("\n"))} className="text-xs text-blue-600 hover:text-blue-500 dark:text-blue-400">
                   {copied ? "Copied!" : "Copy"}
                 </button>
                 <button onClick={handleDownload} className="text-xs text-blue-600 hover:text-blue-500 dark:text-blue-400">
@@ -189,17 +169,7 @@ export default function TextCompareTool({ title, description, faqs }: TextCompar
         )}
       </div>
 
-      <section className="mt-16 border-t border-zinc-100 pt-12 dark:border-zinc-800">
-        <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">Frequently Asked Questions</h2>
-        <div className="mt-8 space-y-6">
-          {faqs.map((faq, i) => (
-            <div key={i}>
-              <h3 className="font-semibold text-zinc-900 dark:text-zinc-50">{faq.question}</h3>
-              <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">{faq.answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      <FaqSection faqs={faqs} />
     </Container>
   );
 }

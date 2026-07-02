@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
 import Container from "@/components/common/Container";
 import { generateGradientCss } from "@/lib/color/colorUtils";
+import ErrorAlert from "@/components/tools/ErrorAlert";
+import FaqSection, { FaqItem } from "@/components/tools/FaqSection";
 
-interface FaqItem { question: string; answer: string; }
-
-interface GradientStop { color: string; position: number; }
+interface GradientStop { id: string; color: string; position: number; }
 
 interface GradientToolProps {
   title: string;
@@ -19,11 +20,11 @@ export default function GradientTool({ title, description, faqs, emphasizeCss }:
   const [gradientType, setGradientType] = useState<"linear" | "radial" | "conic">("linear");
   const [angle, setAngle] = useState("90deg");
   const [stops, setStops] = useState<GradientStop[]>([
-    { color: "#ff6b6b", position: 0 },
-    { color: "#4ecdc4", position: 50 },
-    { color: "#45b7d1", position: 100 },
+    { id: crypto.randomUUID(), color: "#ff6b6b", position: 0 },
+    { id: crypto.randomUUID(), color: "#4ecdc4", position: 50 },
+    { id: crypto.randomUUID(), color: "#45b7d1", position: 100 },
   ]);
-  const [copied, setCopied] = useState(false);
+  const { copied, copy: handleCopy } = useCopyToClipboard();
   const [error, setError] = useState<string | null>(null);
 
   const gradientCss = generateGradientCss(gradientType, stops, angle);
@@ -32,9 +33,9 @@ export default function GradientTool({ title, description, faqs, emphasizeCss }:
     setGradientType("linear");
     setAngle("90deg");
     setStops([
-      { color: "#ff6b6b", position: 0 },
-      { color: "#4ecdc4", position: 50 },
-      { color: "#45b7d1", position: 100 },
+      { id: crypto.randomUUID(), color: "#ff6b6b", position: 0 },
+      { id: crypto.randomUUID(), color: "#4ecdc4", position: 50 },
+      { id: crypto.randomUUID(), color: "#45b7d1", position: 100 },
     ]);
     setError(null);
   };
@@ -42,7 +43,7 @@ export default function GradientTool({ title, description, faqs, emphasizeCss }:
   const addStop = () => {
     if (stops.length >= 10) return;
     const pos = Math.min(100, (stops[stops.length - 1]?.position ?? 0) + 10);
-    setStops([...stops, { color: "#cccccc", position: pos }]);
+    setStops([...stops, { id: crypto.randomUUID(), color: "#cccccc", position: pos }]);
   };
 
   const removeStop = (index: number) => {
@@ -54,11 +55,6 @@ export default function GradientTool({ title, description, faqs, emphasizeCss }:
     setStops(stops.map((s, i) => (i === index ? { ...s, ...updates } : s)));
   };
 
-  const handleCopy = async () => {
-    try { await navigator.clipboard.writeText(gradientCss); setCopied(true); setTimeout(() => setCopied(false), 2000); }
-    catch {}
-  };
-
   return (
     <Container className="py-12">
       <div className="max-w-4xl">
@@ -66,9 +62,7 @@ export default function GradientTool({ title, description, faqs, emphasizeCss }:
         <p className="mt-2 text-zinc-600 dark:text-zinc-400">{description}</p>
       </div>
 
-      {error && (
-        <div className="mt-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-950/50 dark:text-red-400">{error}</div>
-      )}
+      <ErrorAlert error={error} />
 
       <div className="mt-8 space-y-4">
         <div className="rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
@@ -110,7 +104,7 @@ export default function GradientTool({ title, description, faqs, emphasizeCss }:
 
           <div className="mt-4 space-y-3">
             {stops.map((stop, i) => (
-              <div key={i} className="flex flex-wrap items-center gap-2">
+              <div key={stop.id} className="flex flex-wrap items-center gap-2">
                 <input type="color" value={stop.color} onChange={(e) => updateStop(i, { color: e.target.value })}
                   className="h-8 w-12 rounded border border-zinc-200 dark:border-zinc-700 cursor-pointer" />
                 <input type="number" min={0} max={100} value={stop.position} onChange={(e) => updateStop(i, { position: Math.max(0, Math.min(100, Number(e.target.value))) })}
@@ -131,18 +125,13 @@ export default function GradientTool({ title, description, faqs, emphasizeCss }:
         <div className="rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">CSS Code</h3>
-            <button onClick={handleCopy} className="text-xs text-blue-600 hover:text-blue-500 dark:text-blue-400">{copied ? "Copied!" : "Copy CSS"}</button>
+            <button onClick={() => handleCopy(gradientCss)} className="text-xs text-blue-600 hover:text-blue-500 dark:text-blue-400">{copied ? "Copied!" : "Copy CSS"}</button>
           </div>
           <pre className="rounded-lg bg-zinc-50 p-3 text-xs font-mono text-zinc-800 dark:bg-zinc-950 dark:text-zinc-200 overflow-x-auto whitespace-pre-wrap">{gradientCss};</pre>
         </div>
       </div>
 
-      <section className="mt-16 border-t border-zinc-100 pt-12 dark:border-zinc-800">
-        <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">Frequently Asked Questions</h2>
-        <div className="mt-8 space-y-6">{faqs.map((faq, i) => (
-          <div key={i}><h3 className="font-semibold text-zinc-900 dark:text-zinc-50">{faq.question}</h3><p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">{faq.answer}</p></div>
-        ))}</div>
-      </section>
+      <FaqSection faqs={faqs} />
     </Container>
   );
 }

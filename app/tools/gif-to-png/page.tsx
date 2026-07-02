@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import ImageToolShell from "@/components/tools/ImageToolShell";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "GIF to PNG Converter",
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
 
 export default function GifToPngPage() {
   return (
-    <ImageToolShell
+    <ToolErrorBoundary>
+      <ImageToolShell
       title="GIF to PNG"
       description="Convert GIF images to PNG format for higher quality, more colors, and smaller file sizes. PNG supports millions of colors compared to GIF's 256-color limit. Note: Only the first frame of animated GIFs is converted."
       acceptedFormats={["image/gif"]}
@@ -32,5 +34,6 @@ export default function GifToPngPage() {
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

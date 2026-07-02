@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import CodeToolShell from "@/components/tools/dev/CodeToolShell";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "Base64 Encoder",
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <CodeToolShell
+    <ToolErrorBoundary>
+      <CodeToolShell
       title="Base64 Encoder"
       description="Encode any text to Base64 format. Useful for data URIs, API authentication, and binary data transmission."
       mode="base64-encode"
@@ -17,5 +19,6 @@ export default function Page() {
         { question: "Is my data sent to a server?", answer: "Never. Everything runs in your browser." },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

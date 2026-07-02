@@ -1,6 +1,9 @@
 "use client";
 
 import { useState, useCallback, useRef, useMemo } from "react";
+import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
+import ErrorAlert from "@/components/tools/ErrorAlert";
+import FaqSection, { FaqItem } from "@/components/tools/FaqSection";
 import Container from "@/components/common/Container";
 import { generateQrMatrix, drawQrToCanvas, qrToPngBlob } from "@/lib/qr/qrGenerator";
 import {
@@ -12,11 +15,6 @@ import {
   formatLocationQr,
   formatEventQr,
 } from "@/lib/qr/qrFormats";
-
-interface FaqItem {
-  question: string;
-  answer: string;
-}
 
 interface FieldDef {
   key: string;
@@ -65,7 +63,7 @@ export default function QrGeneratorShell({
   const [error, setError] = useState<string | null>(null);
   const [blob, setBlob] = useState<Blob | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [copied, setCopied] = useState(false);
+  const { copied, copy: handleCopy } = useCopyToClipboard();
 
   const formatFn = useMemo(() => (v: Record<string, string>) => formatContent(formatType, v), [formatType]);
 
@@ -87,7 +85,7 @@ export default function QrGeneratorShell({
       const { matrix } = generateQrMatrix(content);
       const canvas = canvasRef.current;
       if (canvas) drawQrToCanvas(canvas, matrix, canvas.offsetWidth || 280);
-      qrToPngBlob(matrix, 512).then(setBlob).catch(() => {});
+      qrToPngBlob(matrix, 512).then(setBlob).catch(() => setError("Failed to generate QR code image."));
     } catch {
       setError("Failed to generate QR code. The content may be too long.");
     }
@@ -103,16 +101,6 @@ export default function QrGeneratorShell({
     URL.revokeObjectURL(url);
   };
 
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(qrContent);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      setError("Failed to copy to clipboard.");
-    }
-  };
-
   return (
     <Container className="py-12">
       <div className="max-w-3xl">
@@ -124,11 +112,7 @@ export default function QrGeneratorShell({
         </p>
       </div>
 
-      {error && (
-        <div className="mt-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-950/50 dark:text-red-400">
-          {error}
-        </div>
-      )}
+      <ErrorAlert error={error} />
 
       <div className="mt-8 grid gap-8 lg:grid-cols-2">
         <div className="space-y-4">
@@ -182,7 +166,7 @@ export default function QrGeneratorShell({
                   Download PNG
                 </button>
                 <button
-                  onClick={handleCopy}
+                  onClick={() => handleCopy(qrContent)}
                   className="inline-flex items-center gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-semibold text-zinc-600 shadow-sm hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 transition-colors"
                 >
                   {copied ? "Copied!" : "Copy Text"}
@@ -199,19 +183,7 @@ export default function QrGeneratorShell({
         </div>
       </div>
 
-      <section className="mt-16 border-t border-zinc-100 pt-12 dark:border-zinc-800">
-        <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-          Frequently Asked Questions
-        </h2>
-        <div className="mt-8 space-y-6">
-          {faqs.map((faq, i) => (
-            <div key={i}>
-              <h3 className="font-semibold text-zinc-900 dark:text-zinc-50">{faq.question}</h3>
-              <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">{faq.answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      <FaqSection faqs={faqs} />
     </Container>
   );
 }

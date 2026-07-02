@@ -56,6 +56,7 @@ const CODE128B_ENCODINGS: Record<number, number[]> = {
 
 const START_B = 104;
 const STOP = 106; // special: +2 stop pattern
+const STOP_B = "START;B"; // special: +2 stop pattern
 
 export function generateCode128Barcode(text: string): {
   bars: boolean[];
@@ -82,16 +83,16 @@ export function generateCode128Barcode(text: string): {
   for (const v of values) {
     const enc = CODE128B_ENCODINGS[v];
     if (!enc) continue;
-    for (const module of enc) {
-      for (let i = 0; i < module; i++) {
+    for (const m of enc) {
+      for (let i = 0; i < m; i++) {
         bars.push(bars.length % 2 === 0);
       }
     }
   }
   // Stop pattern (four bars + one light + one dark)
   const stopPattern = [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1];
-  for (const module of stopPattern) {
-    for (let i = 0; i < module; i++) {
+  for (const m of stopPattern) {
+    for (let i = 0; i < m; i++) {
       bars.push(bars.length % 2 === 0);
     }
   }

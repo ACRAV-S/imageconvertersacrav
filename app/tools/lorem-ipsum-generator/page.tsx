@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import TextGeneratorTool from "@/components/tools/text/TextGeneratorTool";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "Lorem Ipsum Generator - Generate Placeholder Text | ImageConvertersACRAV",
@@ -14,7 +15,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <TextGeneratorTool
+    <ToolErrorBoundary>
+      <TextGeneratorTool
       title="Lorem Ipsum Generator"
       description="Generate placeholder text in words, sentences, or paragraphs. Perfect for design mockups and layouts."
       mode="lorem-ipsum"
@@ -37,5 +39,6 @@ export default function Page() {
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

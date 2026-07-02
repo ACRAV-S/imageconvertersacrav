@@ -1,14 +1,21 @@
 import type { Metadata } from "next";
 import ImageCompressorTool from "@/components/tools/ImageCompressorTool";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
-  title: "Image Compressor",
-  description: "Compress images to reduce file size without losing quality. Free, fast, and private — all in your browser.",
+  title: "Image Compressor — Reduce Image File Size Online",
+  description: "Compress images to reduce file size without losing quality. Free, fast, and private — all in your browser. No uploads, no servers.",
+  keywords: ["image compressor", "compress image", "reduce image size", "JPEG compressor", "PNG compressor"],
+  openGraph: {
+    title: "Image Compressor — Reduce Image File Size Online",
+    description: "Compress images to reduce file size without losing quality. Free, fast, and private.",
+  },
 };
 
 export default function ImageCompressorPage() {
   return (
-    <ImageCompressorTool
+    <ToolErrorBoundary>
+      <ImageCompressorTool
       faqs={[
         {
           question: "How much can I compress an image?",
@@ -20,7 +27,7 @@ export default function ImageCompressorPage() {
         },
         {
           question: "Does compression affect image dimensions?",
-          answer: "No, the dimensions stay the same. Only the file size is reduced through compression algorithms. For very large images (over 4000px), the tool automatically resizes to keep performance fast.",
+          answer: "No, the dimensions stay the same. Only the file size is reduced through compression algorithms.",
         },
         {
           question: "Is my image uploaded to a server?",
@@ -28,5 +35,6 @@ export default function ImageCompressorPage() {
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

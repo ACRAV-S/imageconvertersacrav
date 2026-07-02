@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
 import Container from "@/components/common/Container";
 import { generateClamp } from "@/lib/color/colorUtils";
-
-interface FaqItem { question: string; answer: string; }
+import ErrorAlert from "@/components/tools/ErrorAlert";
+import FaqSection, { FaqItem } from "@/components/tools/FaqSection";
 
 export default function ClampGeneratorTool({ title, description, faqs }: { title: string; description: string; faqs: FaqItem[] }) {
   const [minSize, setMinSize] = useState(16);
@@ -12,14 +13,9 @@ export default function ClampGeneratorTool({ title, description, faqs }: { title
   const [minViewport, setMinViewport] = useState(375);
   const [maxViewport, setMaxViewport] = useState(1200);
   const [unit, setUnit] = useState<"px" | "rem">("px");
-  const [copied, setCopied] = useState(false);
+  const { copied, copy: handleCopy } = useCopyToClipboard();
 
   const clampValue = generateClamp(minSize, maxSize, minViewport, maxViewport, unit);
-
-  const handleCopy = async () => {
-    try { await navigator.clipboard.writeText(`font-size: ${clampValue};`); setCopied(true); setTimeout(() => setCopied(false), 2000); }
-    catch {}
-  };
 
   const handleReset = () => {
     setMinSize(16); setMaxSize(32); setMinViewport(375); setMaxViewport(1200); setUnit("px");
@@ -85,18 +81,13 @@ export default function ClampGeneratorTool({ title, description, faqs }: { title
         <div className="rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">CSS Code</h3>
-            <button onClick={handleCopy} className="text-xs text-blue-600 hover:text-blue-500 dark:text-blue-400">{copied ? "Copied!" : "Copy CSS"}</button>
+            <button onClick={() => handleCopy(`font-size: ${clampValue};`)} className="text-xs text-blue-600 hover:text-blue-500 dark:text-blue-400">{copied ? "Copied!" : "Copy CSS"}</button>
           </div>
           <pre className="rounded-lg bg-zinc-50 p-3 text-xs font-mono text-zinc-800 dark:bg-zinc-950 dark:text-zinc-200 overflow-x-auto whitespace-pre-wrap">font-size: {clampValue};</pre>
         </div>
       </div>
 
-      <section className="mt-16 border-t border-zinc-100 pt-12 dark:border-zinc-800">
-        <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">Frequently Asked Questions</h2>
-        <div className="mt-8 space-y-6">{faqs.map((faq, i) => (
-          <div key={i}><h3 className="font-semibold text-zinc-900 dark:text-zinc-50">{faq.question}</h3><p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">{faq.answer}</p></div>
-        ))}</div>
-      </section>
+      <FaqSection faqs={faqs} />
     </Container>
   );
 }

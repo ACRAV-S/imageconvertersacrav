@@ -1,14 +1,21 @@
 import type { Metadata } from "next";
 import RotateTool from "@/components/tools/RotateTool";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
-  title: "Image Rotator",
+  title: "Image Rotator — Rotate Images at Any Angle Online",
   description: "Rotate images by any angle online. Fix orientation or create artistic effects. Free, fast, and private — all in your browser.",
+  keywords: ["image rotator", "rotate image", "rotate photo", "image orientation", "free image rotator"],
+  openGraph: {
+    title: "Image Rotator — Rotate Images at Any Angle Online",
+    description: "Rotate images by any angle online. Fix orientation or create artistic effects. Free, fast, and private.",
+  },
 };
 
 export default function ImageRotatorPage() {
   return (
-    <RotateTool
+    <ToolErrorBoundary>
+      <RotateTool
       title="Image Rotator"
       description="Rotate your image by any angle. Choose from preset angles (90°, 180°, 270°) or enter a custom angle. All processing happens in your browser."
       faqs={[
@@ -30,5 +37,6 @@ export default function ImageRotatorPage() {
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

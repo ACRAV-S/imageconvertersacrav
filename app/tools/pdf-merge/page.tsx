@@ -1,37 +1,52 @@
 import type { Metadata } from "next";
-import PdfUnavailableTool from "@/components/tools/pdf/PdfUnavailableTool";
+import PdfMergeTool from "@/components/tools/pdf/PdfMergeTool";
+import { SITE_URL } from "@/lib/constants/site";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
-  title: "PDF Merge",
-  description: "Combine multiple PDF files into a single document online. Free, fast, and private — all in your browser.",
+  title: "Merge PDF",
+  description:
+    "Combine multiple PDF files into a single document online. Free, fast, and private — all in your browser with no uploads.",
+  alternates: { canonical: `${SITE_URL}/tools/pdf-merge` },
+  openGraph: {
+    title: "Merge PDF Files Online Free | ImageConvertersACRAV",
+    description:
+      "Combine multiple PDF files into one document. Fast, private, and free — all processing happens in your browser.",
+    url: `${SITE_URL}/tools/pdf-merge`,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Merge PDF Files Online Free | ImageConvertersACRAV",
+    description:
+      "Combine multiple PDF files into one document. Fast, private, and free — all processing happens in your browser.",
+  },
 };
 
 export default function PdfMergePage() {
   return (
-    <PdfUnavailableTool
-      title="PDF Merge"
-      description="Combine multiple PDF files into a single document."
-      operation="merge PDF files"
-      reason="PDF files use cross-reference tables and indirect objects that must be merged at the object level, not by simply concatenating files. Browser APIs provide no access to PDF object structures, and JavaScript cannot reconstruct valid cross-reference tables from concatenated raw PDF data."
-      api="pdf-lib (createPdf, embedPdf, copyPages)"
+    <ToolErrorBoundary>
+      <PdfMergeTool
+      title="Merge PDF"
+      description="Combine multiple PDF files into a single document. Arrange files in the order you want, then merge them into one PDF. All processing happens in your browser — nothing is uploaded."
       faqs={[
         {
-          question: "Why can't PDFs be merged in the browser?",
-          answer: "PDF is a complex binary format with internal cross-reference tables, object streams, and compression. Merging requires parsing each PDF's internal structure, renumbering objects, and rebuilding the cross-reference table — which browser APIs cannot do. A library like pdf-lib handles this entirely client-side but needs to be added to the project.",
+          question: "How does PDF merging work?",
+          answer: "The tool uses pdf-lib, a client-side PDF library, to load each PDF, copy all pages into a new document, and save the result. Everything happens in your browser with no server uploads.",
         },
         {
-          question: "How would PDF merge work with a library?",
-          answer: "A library like pdf-lib can read multiple PDF files, copy pages from each into a new document, and save the result — all in the browser with no server uploads.",
+          question: "How many PDFs can I merge?",
+          answer: "There is no hard limit, but large files may require significant memory. For best results, merge up to 10 files at a time.",
+        },
+        {
+          question: "Can I change the order of files?",
+          answer: "Yes, use the up and down arrows to reorder files before merging. The pages will appear in the final PDF in the order shown.",
         },
         {
           question: "Is my data safe?",
-          answer: "This tool runs entirely in your browser. No files are uploaded anywhere. Once a PDF library is integrated, the merge operation will also be fully client-side.",
-        },
-        {
-          question: "Are there alternative ways to merge PDFs?",
-          answer: "Many desktop applications like Adobe Acrobat, Preview (macOS), and free tools like PDFsam can merge PDFs offline.",
+          answer: "Absolutely. All processing is done in your browser using client-side JavaScript. Your files never leave your device.",
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

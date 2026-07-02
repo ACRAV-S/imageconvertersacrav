@@ -1,20 +1,27 @@
 import type { Metadata } from "next";
 import WatermarkTool from "@/components/tools/WatermarkTool";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
-  title: "Image Watermark",
+  title: "Image Watermark — Add Watermarks to Images Online",
   description: "Add text watermarks to your images online. Customize position, size, opacity, and color. Free and private — all in your browser.",
+  keywords: ["image watermark", "add watermark", "photo watermark", "watermark tool", "protect images"],
+  openGraph: {
+    title: "Image Watermark — Add Watermarks to Images Online",
+    description: "Add text watermarks to your images online. Customize position, size, opacity, and color. Free and private.",
+  },
 };
 
 export default function ImageWatermarkPage() {
   return (
-    <WatermarkTool
+    <ToolErrorBoundary>
+      <WatermarkTool
       title="Image Watermark"
       description="Add a custom text watermark to your image. Choose the position, font size, opacity, and color. All processing happens in your browser — nothing is uploaded."
       faqs={[
         {
           question: "What is a watermark?",
-          answer: "A watermark is text or a logo overlaid on an image to protect copyright, brand content, or add attribution. This tool uses text watermarks.",
+          answer: "A watermark is text overlaid on an image to protect copyright, brand content, or add attribution. This tool uses text watermarks.",
         },
         {
           question: "Can I change the watermark position?",
@@ -30,5 +37,6 @@ export default function ImageWatermarkPage() {
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

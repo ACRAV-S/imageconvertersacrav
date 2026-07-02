@@ -23,17 +23,17 @@ export default function Footer() {
             <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider">Popular Tools</h3>
             <ul className="mt-4 space-y-2">
               <li>
-                <Link href="/" className="text-sm text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors">
+                <Link href="/tools/image-converter" className="text-sm text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors">
                   Image Converter
                 </Link>
               </li>
               <li>
-                <Link href="/" className="text-sm text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors">
-                  PDF Compressor
+                <Link href="/tools/jpg-to-pdf" className="text-sm text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors">
+                  JPG to PDF
                 </Link>
               </li>
               <li>
-                <Link href="/" className="text-sm text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors">
+                <Link href="/tools/json-formatter" className="text-sm text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors">
                   JSON Formatter
                 </Link>
               </li>
@@ -46,6 +46,11 @@ export default function Footer() {
               <li>
                 <Link href="/about" className="text-sm text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors">
                   About Us
+                </Link>
+              </li>
+              <li>
+                <Link href="/blog" className="text-sm text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors">
+                  Blog
                 </Link>
               </li>
               <li>

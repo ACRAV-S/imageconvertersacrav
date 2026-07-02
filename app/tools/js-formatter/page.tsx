@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import CodeToolShell from "@/components/tools/dev/CodeToolShell";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "JavaScript Formatter",
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <CodeToolShell
+    <ToolErrorBoundary>
+      <CodeToolShell
       title="JavaScript Formatter"
       description="Format your JavaScript code with proper indentation. Handles braces, brackets, semicolons, and string literals."
       mode="js-format"
@@ -17,5 +19,6 @@ export default function Page() {
         { question: "Is my data sent to a server?", answer: "Never. Everything runs in your browser. Your code never leaves your device." },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

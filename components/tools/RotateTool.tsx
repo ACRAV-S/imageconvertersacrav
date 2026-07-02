@@ -9,11 +9,9 @@ import ProcessingLoader from "@/components/tools/ProcessingLoader";
 import { formatFileSize } from "@/lib/image/imageUtils";
 import { rotateImage } from "@/lib/image/imageTransform";
 import { useImageTool } from "@/hooks/useImageTool";
-
-interface FaqItem {
-  question: string;
-  answer: string;
-}
+import ErrorAlert from "@/components/tools/ErrorAlert";
+import FaqSection from "@/components/tools/FaqSection";
+import type { FaqItem } from "@/components/tools/FaqSection";
 
 interface RotateToolProps {
   title: string;
@@ -52,6 +50,7 @@ export default function RotateTool({ title, description, faqs }: RotateToolProps
 
     try {
       const blob = await rotateImage(sourceImage, finalAngle);
+      if (resultUrl) URL.revokeObjectURL(resultUrl);
       const url = URL.createObjectURL(blob);
       setResultBlob(blob);
       setResultUrl(url);
@@ -60,7 +59,7 @@ export default function RotateTool({ title, description, faqs }: RotateToolProps
     } finally {
       setIsProcessing(false);
     }
-  }, [sourceImage, angle, customAngle, setIsProcessing, setError, setResultBlob, setResultUrl]);
+  }, [sourceImage, angle, customAngle, resultUrl, setIsProcessing, setError, setResultBlob, setResultUrl]);
 
   const getFilename = () => {
     const base = sourceFile ? sourceFile.name.replace(/\.[^.]+$/, "") : "image";
@@ -78,11 +77,7 @@ export default function RotateTool({ title, description, faqs }: RotateToolProps
         </p>
       </div>
 
-      {error && (
-        <div className="mt-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-950/50 dark:text-red-400">
-          {error}
-        </div>
-      )}
+      <ErrorAlert error={error} />
 
       <div className="mt-8 grid gap-6 lg:grid-cols-2">
         <div className="space-y-6">
@@ -113,14 +108,36 @@ export default function RotateTool({ title, description, faqs }: RotateToolProps
                 Rotate Settings
               </h3>
 
-              <p className="mb-3 text-xs font-medium text-zinc-600 dark:text-zinc-400">
+              <p className="mb-3 text-xs font-medium text-zinc-600 dark:text-zinc-400" id="rotate-angle-label">
                 Preset Angles
               </p>
-              <div className="flex gap-2">
+              <div className="flex gap-2" role="radiogroup" aria-labelledby="rotate-angle-label">
                 {ANGLES.map((a) => (
                   <button
                     key={a}
                     onClick={() => { setAngle(a); setCustomAngle(""); }}
+                    role="radio"
+                    aria-checked={angle === a && !customAngle}
+                    tabIndex={angle === a && !customAngle ? 0 : -1}
+                    onKeyDown={(e) => {
+                      const values = [...ANGLES];
+                      const idx = values.findIndex((v) => v === angle);
+                      let nextIdx: number | null = null;
+                      if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+                        nextIdx = (idx + 1) % values.length;
+                      } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+                        nextIdx = (idx - 1 + values.length) % values.length;
+                      } else if (e.key === "Home") {
+                        nextIdx = 0;
+                      } else if (e.key === "End") {
+                        nextIdx = values.length - 1;
+                      }
+                      if (nextIdx !== null) {
+                        e.preventDefault();
+                        setAngle(values[nextIdx]);
+                        setCustomAngle("");
+                      }
+                    }}
                     className={`flex-1 rounded-lg border px-3 py-2 text-center text-sm font-medium transition-colors ${
                       angle === a && !customAngle
                         ? "border-blue-500 bg-blue-50 text-blue-700 dark:border-blue-400 dark:bg-blue-950/40 dark:text-blue-400"
@@ -181,19 +198,7 @@ export default function RotateTool({ title, description, faqs }: RotateToolProps
         </div>
       )}
 
-      <section className="mt-16 border-t border-zinc-100 pt-12 dark:border-zinc-800">
-        <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-          Frequently Asked Questions
-        </h2>
-        <div className="mt-8 space-y-6">
-          {faqs.map((faq, i) => (
-            <div key={i}>
-              <h3 className="font-semibold text-zinc-900 dark:text-zinc-50">{faq.question}</h3>
-              <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">{faq.answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      <FaqSection faqs={faqs} />
     </Container>
   );
 }

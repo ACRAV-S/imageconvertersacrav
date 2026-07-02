@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import CodeToolShell from "@/components/tools/dev/CodeToolShell";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "JWT Decoder",
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <CodeToolShell
+    <ToolErrorBoundary>
+      <CodeToolShell
       title="JWT Decoder"
       description="Decode JSON Web Tokens to view the header, payload, and signature. The header and payload are Base64-decoded and formatted as JSON for easy reading."
       mode="jwt-decode"
@@ -18,5 +20,6 @@ export default function Page() {
         { question: "Is my token sent to a server?", answer: "Never. Everything runs in your browser. Your token never leaves your device." },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

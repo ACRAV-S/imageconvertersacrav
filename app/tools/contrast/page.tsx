@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import FilterToolShell from "@/components/tools/FilterToolShell";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "Contrast Adjuster",
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
 
 export default function ContrastPage() {
   return (
-    <FilterToolShell
+    <ToolErrorBoundary>
+      <FilterToolShell
       title="Contrast Adjuster"
       description="Adjust the contrast of your image. Increase contrast to make colors and details pop, or decrease for a softer, muted look. All processing happens in your browser."
       filterType="contrast"
@@ -34,5 +36,6 @@ export default function ContrastPage() {
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

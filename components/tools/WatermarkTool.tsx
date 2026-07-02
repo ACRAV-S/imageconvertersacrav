@@ -9,17 +9,17 @@ import ProcessingLoader from "@/components/tools/ProcessingLoader";
 import { formatFileSize } from "@/lib/image/imageUtils";
 import { addWatermark, type WatermarkOptions } from "@/lib/image/imageWatermark";
 import { useImageTool } from "@/hooks/useImageTool";
-
-interface FaqItem {
-  question: string;
-  answer: string;
-}
+import ErrorAlert from "@/components/tools/ErrorAlert";
+import FaqSection from "@/components/tools/FaqSection";
+import type { FaqItem } from "@/components/tools/FaqSection";
 
 interface WatermarkToolProps {
   title: string;
   description: string;
   faqs: FaqItem[];
 }
+
+const PRESET_COLORS = ["#ffffff", "#000000", "#ff0000", "#00ff00", "#0000ff", "#ffff00"];
 
 const POSITIONS: { label: string; value: WatermarkOptions["position"] }[] = [
   { label: "Top Left", value: "top-left" },
@@ -66,6 +66,7 @@ export default function WatermarkTool({ title, description, faqs }: WatermarkToo
         opacity,
         color,
       });
+      if (resultUrl) URL.revokeObjectURL(resultUrl);
       const url = URL.createObjectURL(blob);
       setResultBlob(blob);
       setResultUrl(url);
@@ -74,7 +75,7 @@ export default function WatermarkTool({ title, description, faqs }: WatermarkToo
     } finally {
       setIsProcessing(false);
     }
-  }, [sourceImage, text, position, fontSize, opacity, color, setIsProcessing, setError, setResultBlob, setResultUrl]);
+  }, [sourceImage, text, position, fontSize, opacity, color, resultUrl, setIsProcessing, setError, setResultBlob, setResultUrl]);
 
   const getFilename = () => {
     const base = sourceFile ? sourceFile.name.replace(/\.[^.]+$/, "") : "image";
@@ -92,11 +93,7 @@ export default function WatermarkTool({ title, description, faqs }: WatermarkToo
         </p>
       </div>
 
-      {error && (
-        <div className="mt-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-950/50 dark:text-red-400">
-          {error}
-        </div>
-      )}
+      <ErrorAlert error={error} />
 
       <div className="mt-8 grid gap-6 lg:grid-cols-2">
         <div className="space-y-6">
@@ -152,6 +149,24 @@ export default function WatermarkTool({ title, description, faqs }: WatermarkToo
                       onClick={() => setPosition(p.value)}
                       role="radio"
                       aria-checked={position === p.value}
+                      tabIndex={position === p.value ? 0 : -1}
+                      onKeyDown={(e) => {
+                        const idx = POSITIONS.findIndex((pos) => pos.value === position);
+                        let nextIdx: number | null = null;
+                        if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+                          nextIdx = (idx + 1) % POSITIONS.length;
+                        } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+                          nextIdx = (idx - 1 + POSITIONS.length) % POSITIONS.length;
+                        } else if (e.key === "Home") {
+                          nextIdx = 0;
+                        } else if (e.key === "End") {
+                          nextIdx = POSITIONS.length - 1;
+                        }
+                        if (nextIdx !== null) {
+                          e.preventDefault();
+                          setPosition(POSITIONS[nextIdx].value);
+                        }
+                      }}
                       className={`rounded-lg border px-2 py-1.5 text-center text-xs font-medium transition-colors ${
                         position === p.value
                           ? "border-blue-500 bg-blue-50 text-blue-700 dark:border-blue-400 dark:bg-blue-950/40 dark:text-blue-400"
@@ -200,12 +215,32 @@ export default function WatermarkTool({ title, description, faqs }: WatermarkToo
                 <label className="text-xs font-medium text-zinc-600 dark:text-zinc-400" id="color-label">
                   Color
                 </label>
-                <div className="mt-1 flex gap-2">
-                  {["#ffffff", "#000000", "#ff0000", "#00ff00", "#0000ff", "#ffff00"].map((c) => (
+                <div className="mt-1 flex gap-2" role="radiogroup" aria-labelledby="color-label">
+                  {PRESET_COLORS.map((c) => (
                     <button
                       key={c}
                       onClick={() => setColor(c)}
+                      role="radio"
+                      aria-checked={color === c}
                       aria-label={`Color ${c}`}
+                      tabIndex={color === c ? 0 : -1}
+                      onKeyDown={(e) => {
+                        const idx = PRESET_COLORS.indexOf(color);
+                        let nextIdx: number | null = null;
+                        if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+                          nextIdx = (idx + 1) % PRESET_COLORS.length;
+                        } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+                          nextIdx = (idx - 1 + PRESET_COLORS.length) % PRESET_COLORS.length;
+                        } else if (e.key === "Home") {
+                          nextIdx = 0;
+                        } else if (e.key === "End") {
+                          nextIdx = PRESET_COLORS.length - 1;
+                        }
+                        if (nextIdx !== null) {
+                          e.preventDefault();
+                          setColor(PRESET_COLORS[nextIdx]);
+                        }
+                      }}
                       className={`h-8 w-8 rounded-full border-2 ${
                         color === c ? "border-blue-500 ring-2 ring-blue-300" : "border-zinc-300 dark:border-zinc-600"
                       }`}
@@ -257,19 +292,7 @@ export default function WatermarkTool({ title, description, faqs }: WatermarkToo
         </div>
       )}
 
-      <section className="mt-16 border-t border-zinc-100 pt-12 dark:border-zinc-800">
-        <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-          Frequently Asked Questions
-        </h2>
-        <div className="mt-8 space-y-6">
-          {faqs.map((faq, i) => (
-            <div key={i}>
-              <h3 className="font-semibold text-zinc-900 dark:text-zinc-50">{faq.question}</h3>
-              <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">{faq.answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      <FaqSection faqs={faqs} />
     </Container>
   );
 }

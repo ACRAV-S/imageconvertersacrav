@@ -33,6 +33,24 @@ export default function ImageSettings({
             onClick={() => onFormatChange(fmt.value)}
             role="radio"
             aria-checked={targetFormat === fmt.value}
+            tabIndex={targetFormat === fmt.value ? 0 : -1}
+            onKeyDown={(e) => {
+              const idx = formats.findIndex((f) => f.value === targetFormat);
+              let nextIdx: number | null = null;
+              if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+                nextIdx = (idx + 1) % formats.length;
+              } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+                nextIdx = (idx - 1 + formats.length) % formats.length;
+              } else if (e.key === "Home") {
+                nextIdx = 0;
+              } else if (e.key === "End") {
+                nextIdx = formats.length - 1;
+              }
+              if (nextIdx !== null) {
+                e.preventDefault();
+                onFormatChange(formats[nextIdx].value);
+              }
+            }}
             className={`rounded-lg border px-3 py-2 text-center text-xs font-medium transition-colors ${
               targetFormat === fmt.value
                 ? "border-blue-500 bg-blue-50 text-blue-700 dark:border-blue-400 dark:bg-blue-950/40 dark:text-blue-400"

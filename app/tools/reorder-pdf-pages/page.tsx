@@ -1,33 +1,48 @@
 import type { Metadata } from "next";
-import PdfUnavailableTool from "@/components/tools/pdf/PdfUnavailableTool";
+import PdfReorderPagesTool from "@/components/tools/pdf/PdfReorderPagesTool";
+import { SITE_URL } from "@/lib/constants/site";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "Reorder PDF Pages",
-  description: "Rearrange PDF pages by drag and drop online. Organize your document in any order. Free and private.",
+  description:
+    "Rearrange PDF pages in any order online. Move pages up or down with simple controls. Free, fast, and private — all in your browser.",
+  alternates: { canonical: `${SITE_URL}/tools/reorder-pdf-pages` },
+  openGraph: {
+    title: "Reorder PDF Pages Online Free | ImageConvertersACRAV",
+    description:
+      "Rearrange the order of pages in your PDF document. Simple up/down controls make reordering easy. All processing happens in your browser.",
+    url: `${SITE_URL}/tools/reorder-pdf-pages`,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Reorder PDF Pages Online Free | ImageConvertersACRAV",
+    description:
+      "Rearrange the order of pages in your PDF document. Simple up/down controls make reordering easy.",
+  },
 };
 
 export default function ReorderPdfPagesPage() {
   return (
-    <PdfUnavailableTool
+    <ToolErrorBoundary>
+      <PdfReorderPagesTool
       title="Reorder PDF Pages"
-      description="Rearrange the pages of your PDF by moving them into any order you choose."
-      operation="reorder pages in a PDF"
-      reason="Reordering pages requires rebuilding the PDF page tree with pages in the new order, reassigning page numbers in internal references, and updating the cross-reference table. Browser APIs provide no way to manipulate PDF document structure."
-      api="pdf-lib (PDFDocument.load, copyPages in desired order, save)"
+      description="Rearrange the pages of your PDF in any order using simple up and down controls. All processing happens in your browser — nothing is uploaded."
       faqs={[
         {
-          question: "Why can't pages be reordered natively?",
-          answer: "The PDF page tree defines the order of pages. Changing the order requires reconstructing this tree and ensuring all internal references (table of contents, hyperlinks) still point to the correct content. Browser APIs have no access to these structures.",
+          question: "How does page reordering work?",
+          answer: "The tool uses pdf-lib to copy pages from the source PDF into a new document in the order you specify. All content, fonts, and formatting are preserved.",
         },
         {
-          question: "How would reordering work with a library?",
-          answer: "pdf-lib can load a PDF, copy pages into a new document in the desired order, and save the result — preserving all content and resources — entirely in the browser.",
+          question: "Can I move a page to a specific position?",
+          answer: "Yes, use the up and down arrows next to each page to move it to the desired position. The page numbers update in real time.",
         },
         {
           question: "Is my data safe?",
-          answer: "This tool runs entirely in your browser. No files are uploaded anywhere. Once a PDF library is integrated, page reordering will also be fully client-side.",
+          answer: "Absolutely. All processing is done in your browser using client-side JavaScript. Your files never leave your device.",
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

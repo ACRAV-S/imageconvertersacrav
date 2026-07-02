@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import UuidGeneratorTool from "@/components/tools/dev/UuidGeneratorTool";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "UUID Generator",
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <UuidGeneratorTool
+    <ToolErrorBoundary>
+      <UuidGeneratorTool
       title="UUID Generator"
       description="Generate cryptographically secure random UUIDs (v4) using your browser's crypto API. Generate one or multiple at once."
       faqs={[
@@ -18,5 +20,6 @@ export default function Page() {
         { question: "Is my data sent to a server?", answer: "Never. Everything runs in your browser." },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

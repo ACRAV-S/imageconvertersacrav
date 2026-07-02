@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import QrGeneratorShell from "@/components/tools/qr/QrGeneratorShell";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "Event QR Generator",
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
 
 export default function EventQrPage() {
   return (
-    <QrGeneratorShell
+    <ToolErrorBoundary>
+      <QrGeneratorShell
       title="Event QR Generator"
       description="Create a QR code that adds an event to the user's calendar. Include title, date/time, description, and location."
       fields={[
@@ -38,5 +40,6 @@ export default function EventQrPage() {
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

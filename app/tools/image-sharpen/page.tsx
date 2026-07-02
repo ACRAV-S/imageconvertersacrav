@@ -1,14 +1,21 @@
 import type { Metadata } from "next";
 import FilterToolShell from "@/components/tools/FilterToolShell";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
-  title: "Image Sharpen",
+  title: "Image Sharpen — Sharpen Blurry Images Online",
   description: "Sharpen blurry or soft images online. Enhance details and make your photos crystal clear. Free and private — all in your browser.",
+  keywords: ["image sharpen", "sharpen image", "unsharp mask", "photo sharpener", "enhance details"],
+  openGraph: {
+    title: "Image Sharpen — Sharpen Blurry Images Online",
+    description: "Sharpen blurry or soft images online. Enhance details and make your photos crystal clear. Free and private.",
+  },
 };
 
 export default function ImageSharpenPage() {
   return (
-    <FilterToolShell
+    <ToolErrorBoundary>
+      <FilterToolShell
       title="Image Sharpen"
       description="Sharpen your image to enhance details and edges. Use the intensity slider to control the sharpening strength. All processing happens in your browser."
       filterType="sharpen"
@@ -34,5 +41,6 @@ export default function ImageSharpenPage() {
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

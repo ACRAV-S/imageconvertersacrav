@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import QrGeneratorShell from "@/components/tools/qr/QrGeneratorShell";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "Location QR Generator",
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
 
 export default function LocationQrPage() {
   return (
-    <QrGeneratorShell
+    <ToolErrorBoundary>
+      <QrGeneratorShell
       title="Location QR Generator"
       description="Generate a QR code that opens a maps app at a specific GPS coordinate. Enter latitude and longitude to create a shareable location QR."
       fields={[
@@ -35,5 +37,6 @@ export default function LocationQrPage() {
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

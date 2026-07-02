@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import FilterToolShell from "@/components/tools/FilterToolShell";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "Grayscale Converter",
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
 
 export default function GrayscalePage() {
   return (
-    <FilterToolShell
+    <ToolErrorBoundary>
+      <FilterToolShell
       title="Grayscale Converter"
       description="Convert your color image to black and white. Uses the luminosity method for natural-looking grayscale that preserves detail and contrast. All processing happens in your browser."
       filterType="grayscale"
@@ -32,5 +34,6 @@ export default function GrayscalePage() {
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

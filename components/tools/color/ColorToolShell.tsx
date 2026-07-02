@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import Link from "next/link";
 import Container from "@/components/common/Container";
 import { hexToRgb, rgbToHex, hexToHsl, rgbToHsl, hslToRgb, isValidHex, isValidRgb } from "@/lib/color/colorUtils";
-
-interface FaqItem { question: string; answer: string; }
+import ErrorAlert from "@/components/tools/ErrorAlert";
+import FaqSection, { FaqItem } from "@/components/tools/FaqSection";
+import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
 
 type ConverterMode = "hex-to-rgb" | "rgb-to-hex" | "hex-to-hsl" | "rgb-to-hsl";
 
@@ -23,8 +25,8 @@ export default function ColorToolShell({ title, description, faqs, mode }: Color
   const [output, setOutput] = useState("");
   const [previewColor, setPreviewColor] = useState("#3498db");
   const [error, setError] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
-  const [copiedCss, setCopiedCss] = useState(false);
+  const { copied, copy: handleCopy } = useCopyToClipboard();
+  const { copied: copiedCss, copy: handleCopyCss } = useCopyToClipboard();
 
   const needsHex = mode === "hex-to-rgb" || mode === "hex-to-hsl";
   const needsRgb = mode === "rgb-to-hex" || mode === "rgb-to-hsl";
@@ -74,19 +76,13 @@ export default function ColorToolShell({ title, description, faqs, mode }: Color
     }
   }, [mode, hexInput, rInput, gInput, bInput, needsHex, needsRgb]);
 
-  const handleCopy = async () => {
-    try { await navigator.clipboard.writeText(output); setCopied(true); setTimeout(() => setCopied(false), 2000); }
-    catch { setError("Failed to copy."); }
-  };
-
-  const handleCopyCss = async () => {
+  const handleClickCopyCss = () => {
     let css = "";
     if (mode === "hex-to-rgb") css = `color: ${output};`;
     else if (mode === "rgb-to-hex") css = `color: ${output};`;
     else if (mode === "hex-to-hsl") css = `color: ${output};`;
     else css = `color: ${rgbToHex(parseInt(rInput), parseInt(gInput), parseInt(bInput))};`;
-    try { await navigator.clipboard.writeText(css); setCopiedCss(true); setTimeout(() => setCopiedCss(false), 2000); }
-    catch { setError("Failed to copy CSS."); }
+    handleCopyCss(css);
   };
 
   const handleReset = () => {
@@ -102,9 +98,7 @@ export default function ColorToolShell({ title, description, faqs, mode }: Color
         <p className="mt-2 text-zinc-600 dark:text-zinc-400">{description}</p>
       </div>
 
-      {error && (
-        <div className="mt-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-950/50 dark:text-red-400">{error}</div>
-      )}
+      <ErrorAlert error={error} />
 
       <div className="mt-8 space-y-4">
         <div className="rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
@@ -159,8 +153,8 @@ export default function ColorToolShell({ title, description, faqs, mode }: Color
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Result</h3>
               <div className="flex gap-2">
-                <button onClick={handleCopy} className="text-xs text-blue-600 hover:text-blue-500 dark:text-blue-400">{copied ? "Copied!" : "Copy"}</button>
-                <button onClick={handleCopyCss} className="text-xs text-blue-600 hover:text-blue-500 dark:text-blue-400">{copiedCss ? "Copied!" : "Copy CSS"}</button>
+                <button onClick={() => handleCopy(output)} className="text-xs text-blue-600 hover:text-blue-500 dark:text-blue-400">{copied ? "Copied!" : "Copy"}</button>
+                <button onClick={handleClickCopyCss} className="text-xs text-blue-600 hover:text-blue-500 dark:text-blue-400">{copiedCss ? "Copied!" : "Copy CSS"}</button>
               </div>
             </div>
             <div className="rounded-lg bg-zinc-50 p-4 font-mono text-sm dark:bg-zinc-950 dark:text-zinc-200">{output}</div>
@@ -170,12 +164,7 @@ export default function ColorToolShell({ title, description, faqs, mode }: Color
 
       <RelatedTools current={mode.replace(/-/g, "-")} />
 
-      <section className="mt-16 border-t border-zinc-100 pt-12 dark:border-zinc-800">
-        <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">Frequently Asked Questions</h2>
-        <div className="mt-8 space-y-6">{faqs.map((faq, i) => (
-          <div key={i}><h3 className="font-semibold text-zinc-900 dark:text-zinc-50">{faq.question}</h3><p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">{faq.answer}</p></div>
-        ))}</div>
-      </section>
+      <FaqSection faqs={faqs} />
     </Container>
   );
 }
@@ -192,7 +181,7 @@ function RelatedTools({ current }: { current: string }) {
     <div className="mt-6 flex flex-wrap gap-2">
       <span className="text-xs text-zinc-400 dark:text-zinc-500 self-center">Related:</span>
       {links.map((l) => (
-        <a key={l.slug} href={`/tools/${l.slug}`} className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700 transition-colors">{l.label}</a>
+        <Link key={l.slug} href={`/tools/${l.slug}`} className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700 transition-colors">{l.label}</Link>
       ))}
     </div>
   );

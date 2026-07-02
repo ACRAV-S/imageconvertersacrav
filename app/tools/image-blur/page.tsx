@@ -1,14 +1,21 @@
 import type { Metadata } from "next";
 import FilterToolShell from "@/components/tools/FilterToolShell";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
-  title: "Image Blur",
+  title: "Image Blur — Blur Images Online with Adjustable Radius",
   description: "Blur images online with adjustable radius. Perfect for backgrounds, censoring, or creative effects. Free and private — all in your browser.",
+  keywords: ["image blur", "blur image", "gaussian blur", "blur background", "photo blur"],
+  openGraph: {
+    title: "Image Blur — Blur Images Online with Adjustable Radius",
+    description: "Blur images online with adjustable radius. Perfect for backgrounds, censoring, or creative effects. Free and private.",
+  },
 };
 
 export default function ImageBlurPage() {
   return (
-    <FilterToolShell
+    <ToolErrorBoundary>
+      <FilterToolShell
       title="Image Blur"
       description="Apply a blur effect to your image. Use the slider to control the blur radius — subtle softening or heavy blur. All processing happens in your browser."
       filterType="blur"
@@ -18,7 +25,7 @@ export default function ImageBlurPage() {
       faqs={[
         {
           question: "What type of blur is used?",
-          answer: "This tool uses the CSS Gaussian blur filter via the Canvas API. It creates a smooth, natural-looking blur effect.",
+          answer: "This tool uses Gaussian blur via the Canvas API. It creates a smooth, natural-looking blur effect.",
         },
         {
           question: "What blur radius should I use?",
@@ -34,5 +41,6 @@ export default function ImageBlurPage() {
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

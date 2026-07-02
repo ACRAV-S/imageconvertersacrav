@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import QrGeneratorShell from "@/components/tools/qr/QrGeneratorShell";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "WhatsApp QR Generator",
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
 
 export default function WhatsAppQrPage() {
   return (
-    <QrGeneratorShell
+    <ToolErrorBoundary>
+      <QrGeneratorShell
       title="WhatsApp QR Generator"
       description="Generate a QR code that opens a WhatsApp chat with a specific phone number and pre-filled message."
       fields={[
@@ -35,5 +37,6 @@ export default function WhatsAppQrPage() {
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

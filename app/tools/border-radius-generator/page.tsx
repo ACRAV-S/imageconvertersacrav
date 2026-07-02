@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import CssGeneratorShell from "@/components/tools/color/CssGeneratorShell";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "Border Radius Generator - Create Rounded Corners Online | ImageConvertersACRAV",
@@ -9,7 +10,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <CssGeneratorShell
+    <ToolErrorBoundary>
+      <CssGeneratorShell
       title="Border Radius Generator"
       description="Generate custom border-radius CSS with per-corner control. Create rounded corners for any element."
       mode="border-radius"
@@ -20,5 +22,6 @@ export default function Page() {
         { question: "Is this tool free and secure?", answer: "Yes. All processing is client-side and private." },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

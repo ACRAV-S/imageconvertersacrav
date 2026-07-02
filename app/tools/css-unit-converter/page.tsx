@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import UnitConverterTool from "@/components/tools/color/UnitConverterTool";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "CSS Unit Converter - Convert px rem em Online | ImageConvertersACRAV",
@@ -9,7 +10,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <UnitConverterTool
+    <ToolErrorBoundary>
+      <UnitConverterTool
       title="CSS Unit Converter"
       description="Convert between px, rem, and em units. Includes configurable base font size and reference conversion table."
       faqs={[
@@ -19,5 +21,6 @@ export default function Page() {
         { question: "Is this tool free and secure?", answer: "Yes. All conversion happens client-side in your browser." },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

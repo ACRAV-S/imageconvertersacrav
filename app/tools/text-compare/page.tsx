@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import TextCompareTool from "@/components/tools/text/TextCompareTool";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "Text Compare (Diff) - Compare Text Online | ImageConvertersACRAV",
@@ -14,7 +15,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <TextCompareTool
+    <ToolErrorBoundary>
+      <TextCompareTool
       title="Text Compare (Diff)"
       description="Compare two texts side by side and see the differences highlighted. Find added and removed lines instantly."
       faqs={[
@@ -36,5 +38,6 @@ export default function Page() {
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

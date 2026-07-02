@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import TextGeneratorTool from "@/components/tools/text/TextGeneratorTool";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "Random String Generator - Generate Secure Strings | ImageConvertersACRAV",
@@ -14,7 +15,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <TextGeneratorTool
+    <ToolErrorBoundary>
+      <TextGeneratorTool
       title="Random String Generator"
       description="Generate secure random strings with customizable length and character sets. Perfect for passwords and tokens."
       mode="random-string"
@@ -37,5 +39,6 @@ export default function Page() {
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

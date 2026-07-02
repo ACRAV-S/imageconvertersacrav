@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import ImageToolShell from "@/components/tools/ImageToolShell";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "JPG to WebP Converter",
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
 
 export default function JpgToWebpPage() {
   return (
-    <ImageToolShell
+    <ToolErrorBoundary>
+      <ImageToolShell
       title="JPG to WebP"
       description="Convert your JPG images to WebP format and reduce file size by up to 30% without visible quality loss. WebP is the modern standard for web images, supported by all major browsers."
       acceptedFormats={["image/jpeg"]}
@@ -32,5 +34,6 @@ export default function JpgToWebpPage() {
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

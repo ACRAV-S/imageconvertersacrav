@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import QrScannerTool from "@/components/tools/qr/QrScannerTool";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "QR Code Scanner",
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
 
 export default function QrScannerPage() {
   return (
-    <QrScannerTool
+    <ToolErrorBoundary>
+      <QrScannerTool
       title="QR Code Scanner"
       description="Upload a screenshot or image containing a QR code to decode it. Uses the browser's built-in BarcodeDetector API for fast, accurate scanning."
       faqs={[
@@ -26,5 +28,6 @@ export default function QrScannerPage() {
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

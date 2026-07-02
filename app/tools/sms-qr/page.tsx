@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import QrGeneratorShell from "@/components/tools/qr/QrGeneratorShell";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "SMS QR Generator",
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
 
 export default function SmsQrPage() {
   return (
-    <QrGeneratorShell
+    <ToolErrorBoundary>
+      <QrGeneratorShell
       title="SMS QR Generator"
       description="Create a QR code that opens the device's messaging app with a pre-filled phone number and message."
       fields={[
@@ -35,5 +37,6 @@ export default function SmsQrPage() {
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

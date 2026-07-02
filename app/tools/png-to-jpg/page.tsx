@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import ImageToolShell from "@/components/tools/ImageToolShell";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "PNG to JPG Converter",
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
 
 export default function PngToJpgPage() {
   return (
-    <ImageToolShell
+    <ToolErrorBoundary>
+      <ImageToolShell
       title="PNG to JPG"
       description="Convert your PNG images to JPG format for smaller file sizes and broader compatibility. Perfect for photographs and web images where transparency is not needed. All processing runs in your browser."
       acceptedFormats={["image/png"]}
@@ -32,5 +34,6 @@ export default function PngToJpgPage() {
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

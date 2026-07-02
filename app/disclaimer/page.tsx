@@ -1,9 +1,22 @@
 import type { Metadata } from "next";
 import Container from "@/components/common/Container";
 
+const siteUrl = "https://imageconvertersacrav.vercel.app";
+
 export const metadata: Metadata = {
   title: "Disclaimer",
   description: "Disclaimer for ImageConvertersACRAV tools and services. Services are provided on an 'as is' basis without warranties.",
+  alternates: { canonical: `${siteUrl}/disclaimer` },
+  openGraph: {
+    title: "Disclaimer | ImageConvertersACRAV",
+    description: "Disclaimer for ImageConvertersACRAV tools and services.",
+    url: `${siteUrl}/disclaimer`,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Disclaimer | ImageConvertersACRAV",
+    description: "Disclaimer for ImageConvertersACRAV tools and services.",
+  },
 };
 
 export default function DisclaimerPage() {

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import RegexTesterTool from "@/components/tools/dev/RegexTesterTool";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "Regex Tester",
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <RegexTesterTool
+    <ToolErrorBoundary>
+      <RegexTesterTool
       title="Regex Tester"
       description="Test your regular expressions against sample text. Enter a pattern, flags, and test text to see all matches with their positions and captured groups."
       faqs={[
@@ -17,5 +19,6 @@ export default function Page() {
         { question: "Is my data sent to a server?", answer: "Never. Everything runs in your browser." },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

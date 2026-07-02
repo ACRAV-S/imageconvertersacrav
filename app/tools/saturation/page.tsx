@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import FilterToolShell from "@/components/tools/FilterToolShell";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "Saturation Adjuster",
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
 
 export default function SaturationPage() {
   return (
-    <FilterToolShell
+    <ToolErrorBoundary>
+      <FilterToolShell
       title="Saturation Adjuster"
       description="Control the color intensity of your image. Increase saturation for bold, vibrant colors, or decrease for a subtle, muted appearance. All processing happens in your browser."
       filterType="saturation"
@@ -34,5 +36,6 @@ export default function SaturationPage() {
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

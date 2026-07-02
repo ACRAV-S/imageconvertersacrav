@@ -4,10 +4,12 @@ import { useState, useCallback, useMemo } from "react";
 import Container from "@/components/common/Container";
 import ImageUploader from "@/components/tools/ImageUploader";
 import ImagePreview from "@/components/tools/ImagePreview";
+import ImageInfoOverlay from "@/components/tools/ImageInfoOverlay";
 import DownloadButton from "@/components/tools/DownloadButton";
 import ProcessingLoader from "@/components/tools/ProcessingLoader";
 import { formatFileSize } from "@/lib/image/imageUtils";
 import { useImageTool } from "@/hooks/useImageTool";
+import { useImageInfo } from "@/hooks/useImageInfo";
 import {
   adjustBrightness,
   adjustContrast,
@@ -16,11 +18,9 @@ import {
   applyBlur,
   applySharpen,
 } from "@/lib/image/imageFilters";
-
-interface FaqItem {
-  question: string;
-  answer: string;
-}
+import ErrorAlert from "@/components/tools/ErrorAlert";
+import FaqSection from "@/components/tools/FaqSection";
+import type { FaqItem } from "@/components/tools/FaqSection";
 
 interface FilterParam {
   key: string;
@@ -73,6 +73,12 @@ export default function FilterToolShell({
     setIsProcessing, setResultBlob, setResultUrl, setError,
     handleUpload, handleReset,
   } = useImageTool();
+  const { info: sourceInfo, refresh: refreshSourceInfo } = useImageInfo();
+
+  const handleUploadFn = useCallback(async (file: File) => {
+    await handleUpload(file);
+    refreshSourceInfo(file);
+  }, [handleUpload, refreshSourceInfo]);
 
   const handleProcess = useCallback(async () => {
     if (!sourceImage) return;
@@ -83,6 +89,7 @@ export default function FilterToolShell({
 
     try {
       const blob = await processFn(sourceImage, paramValues);
+      if (resultUrl) URL.revokeObjectURL(resultUrl);
       const url = URL.createObjectURL(blob);
       setResultBlob(blob);
       setResultUrl(url);
@@ -91,7 +98,7 @@ export default function FilterToolShell({
     } finally {
       setIsProcessing(false);
     }
-  }, [sourceImage, paramValues, processFn, setIsProcessing, setError, setResultBlob, setResultUrl]);
+  }, [sourceImage, paramValues, processFn, resultUrl, setIsProcessing, setError, setResultBlob, setResultUrl]);
 
   const getFilename = () => {
     const base = sourceFile ? sourceFile.name.replace(/\.[^.]+$/, "") : "image";
@@ -113,16 +120,12 @@ export default function FilterToolShell({
         </p>
       </div>
 
-      {error && (
-        <div className="mt-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-950/50 dark:text-red-400">
-          {error}
-        </div>
-      )}
+      <ErrorAlert error={error} />
 
       <div className="mt-8 grid gap-6 lg:grid-cols-2">
         <div className="space-y-6">
           {!sourceDataUrl ? (
-            <ImageUploader onUpload={handleUpload} />
+            <ImageUploader onUpload={handleUploadFn} />
           ) : (
             <>
               <ImagePreview
@@ -130,7 +133,11 @@ export default function FilterToolShell({
                 label="Original"
                 alt="Original image"
                 fileSize={sourceFile ? formatFileSize(sourceFile.size) : undefined}
+                showZoom
               />
+              {sourceInfo && (
+                <ImageInfoOverlay info={sourceInfo} />
+              )}
               <button
                 onClick={handleReset}
                 className="text-sm text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200 transition-colors"
@@ -196,6 +203,7 @@ export default function FilterToolShell({
             label="Result"
             alt="Processed image"
             fileSize={resultBlob ? formatFileSize(resultBlob.size) : undefined}
+            showZoom
           />
           <div className="flex flex-col items-start justify-end gap-4">
             <DownloadButton blob={resultBlob} filename={getFilename()} />
@@ -206,19 +214,7 @@ export default function FilterToolShell({
         </div>
       )}
 
-      <section className="mt-16 border-t border-zinc-100 pt-12 dark:border-zinc-800">
-        <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-          Frequently Asked Questions
-        </h2>
-        <div className="mt-8 space-y-6">
-          {faqs.map((faq, i) => (
-            <div key={i}>
-              <h3 className="font-semibold text-zinc-900 dark:text-zinc-50">{faq.question}</h3>
-              <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">{faq.answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      <FaqSection faqs={faqs} />
     </Container>
   );
 }

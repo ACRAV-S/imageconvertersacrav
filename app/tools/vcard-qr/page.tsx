@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import QrGeneratorShell from "@/components/tools/qr/QrGeneratorShell";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "vCard QR Generator",
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
 
 export default function VCardQrPage() {
   return (
-    <QrGeneratorShell
+    <ToolErrorBoundary>
+      <QrGeneratorShell
       title="vCard QR Generator"
       description="Create a QR code containing your contact information. When scanned, it offers to save the contact directly to the phone's address book."
       fields={[
@@ -41,5 +43,6 @@ export default function VCardQrPage() {
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

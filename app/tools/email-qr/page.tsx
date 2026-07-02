@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import QrGeneratorShell from "@/components/tools/qr/QrGeneratorShell";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "Email QR Generator",
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
 
 export default function EmailQrPage() {
   return (
-    <QrGeneratorShell
+    <ToolErrorBoundary>
+      <QrGeneratorShell
       title="Email QR Generator"
       description="Generate a QR code that opens the user's email app with a pre-composed message. Include the recipient, subject, and body."
       fields={[
@@ -36,5 +38,6 @@ export default function EmailQrPage() {
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

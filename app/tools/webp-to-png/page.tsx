@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import ImageToolShell from "@/components/tools/ImageToolShell";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "WebP to PNG Converter",
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
 
 export default function WebpToPngPage() {
   return (
-    <ImageToolShell
+    <ToolErrorBoundary>
+      <ImageToolShell
       title="WebP to PNG"
       description="Convert WebP images to PNG format for maximum compatibility. PNG preserves all quality and transparency, making it ideal for editing, printing, and sharing. All processing runs in your browser."
       acceptedFormats={["image/webp"]}
@@ -32,5 +34,6 @@ export default function WebpToPngPage() {
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

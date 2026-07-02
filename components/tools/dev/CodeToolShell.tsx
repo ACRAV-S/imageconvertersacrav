@@ -1,17 +1,15 @@
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
+import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
+import ErrorAlert from "@/components/tools/ErrorAlert";
+import FaqSection, { FaqItem } from "@/components/tools/FaqSection";
 import Container from "@/components/common/Container";
 import {
   formatJson, validateJson, minifyJson, beautifyJson,
   encodeBase64, decodeBase64, encodeUrl, decodeUrl,
   decodeJwt, formatHtml, formatCss, formatJs,
 } from "@/lib/dev/transformers";
-
-interface FaqItem {
-  question: string;
-  answer: string;
-}
 
 type ToolMode =
   | "json-format" | "json-validate" | "json-minify" | "json-beautify"
@@ -77,7 +75,7 @@ export default function CodeToolShell({
   const [error, setError] = useState<string | null>(null);
   const [validation, setValidation] = useState<{ ok: boolean; msg: string } | null>(null);
   const [jwtResult, setJwtResult] = useState<{ headerParsed: string; payloadParsed: string; signature: string } | null>(null);
-  const [copied, setCopied] = useState(false);
+  const { copied, copy: handleCopy } = useCopyToClipboard();
 
   const sample = pageSample || getDefaultSample(mode);
   const placeholder = pagePlaceholder || getPlaceholder(mode);
@@ -151,19 +149,6 @@ export default function CodeToolShell({
     }
   }, [input, mode]);
 
-  const handleCopy = async () => {
-    const text = jwtResult
-      ? `Header:\n${jwtResult.headerParsed}\n\nPayload:\n${jwtResult.payloadParsed}\n\nSignature:\n${jwtResult.signature}`
-      : output;
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      setError("Failed to copy.");
-    }
-  };
-
   const handleClear = () => {
     setInput("");
     setOutput("");
@@ -197,11 +182,7 @@ export default function CodeToolShell({
         <p className="mt-2 text-zinc-600 dark:text-zinc-400">{description}</p>
       </div>
 
-      {error && (
-        <div className="mt-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-950/50 dark:text-red-400">
-          {error}
-        </div>
-      )}
+      <ErrorAlert error={error} />
 
       {validation && (
         <div className={`mt-6 rounded-lg border px-4 py-3 text-sm ${
@@ -249,7 +230,7 @@ export default function CodeToolShell({
           <div className="rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Output</h3>
-              <button onClick={handleCopy} className="text-xs text-blue-600 hover:text-blue-500 dark:text-blue-400">
+              <button onClick={() => handleCopy(jwtResult ? `Header:\n${jwtResult.headerParsed}\n\nPayload:\n${jwtResult.payloadParsed}\n\nSignature:\n${jwtResult.signature}` : output)} className="text-xs text-blue-600 hover:text-blue-500 dark:text-blue-400">
                 {copied ? "Copied!" : "Copy"}
               </button>
             </div>
@@ -271,7 +252,7 @@ export default function CodeToolShell({
             <div className="rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Header</h3>
-                <button onClick={handleCopy} className="text-xs text-blue-600 hover:text-blue-500 dark:text-blue-400">
+                <button onClick={() => handleCopy(jwtResult ? `Header:\n${jwtResult.headerParsed}\n\nPayload:\n${jwtResult.payloadParsed}\n\nSignature:\n${jwtResult.signature}` : output)} className="text-xs text-blue-600 hover:text-blue-500 dark:text-blue-400">
                   {copied ? "Copied!" : "Copy all"}
                 </button>
               </div>
@@ -297,17 +278,7 @@ export default function CodeToolShell({
         )}
       </div>
 
-      <section className="mt-16 border-t border-zinc-100 pt-12 dark:border-zinc-800">
-        <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">Frequently Asked Questions</h2>
-        <div className="mt-8 space-y-6">
-          {faqs.map((faq, i) => (
-            <div key={i}>
-              <h3 className="font-semibold text-zinc-900 dark:text-zinc-50">{faq.question}</h3>
-              <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">{faq.answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      <FaqSection faqs={faqs} />
     </Container>
   );
 }

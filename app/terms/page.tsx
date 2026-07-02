@@ -1,9 +1,22 @@
 import type { Metadata } from "next";
 import Container from "@/components/common/Container";
 
+const siteUrl = "https://imageconvertersacrav.vercel.app";
+
 export const metadata: Metadata = {
   title: "Terms of Service",
   description: "Terms of service for ImageConvertersACRAV. By accessing or using our website, you agree to comply with these terms.",
+  alternates: { canonical: `${siteUrl}/terms` },
+  openGraph: {
+    title: "Terms of Service | ImageConvertersACRAV",
+    description: "Terms of service for ImageConvertersACRAV.",
+    url: `${siteUrl}/terms`,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Terms of Service | ImageConvertersACRAV",
+    description: "Terms of service for ImageConvertersACRAV.",
+  },
 };
 
 export default function TermsPage() {

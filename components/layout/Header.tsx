@@ -27,6 +27,9 @@ export default function Header() {
             <Link href="/tools" className="text-sm font-medium text-zinc-600 hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-white transition-colors">
               Tools
             </Link>
+            <Link href="/blog" className="text-sm font-medium text-zinc-600 hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-white transition-colors">
+              Blog
+            </Link>
             <Link href="/about" className="text-sm font-medium text-zinc-600 hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-white transition-colors">
               About
             </Link>
@@ -70,6 +73,13 @@ export default function Header() {
                   className="rounded-md px-3 py-2 text-base font-medium text-zinc-600 hover:bg-zinc-50 hover:text-zinc-950 dark:text-zinc-300 dark:hover:bg-zinc-900 dark:hover:text-white transition-all"
                 >
                   Tools
+                </Link>
+                <Link
+                  href="/blog"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="rounded-md px-3 py-2 text-base font-medium text-zinc-600 hover:bg-zinc-50 hover:text-zinc-950 dark:text-zinc-300 dark:hover:bg-zinc-900 dark:hover:text-white transition-all"
+                >
+                  Blog
                 </Link>
                 <Link
                   href="/about"

@@ -1,33 +1,52 @@
 import type { Metadata } from "next";
-import PdfUnavailableTool from "@/components/tools/pdf/PdfUnavailableTool";
+import PdfToJpgTool from "@/components/tools/pdf/PdfToJpgTool";
+import { SITE_URL } from "@/lib/constants/site";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
   title: "PDF to JPG",
-  description: "Convert PDF pages to JPG images online. Extract each page as a high-quality image. Free and private.",
+  description:
+    "Convert PDF pages to high-quality JPG images online. Extract every page as an image. Free, fast, and private — all in your browser with no uploads.",
+  alternates: { canonical: `${SITE_URL}/tools/pdf-to-jpg` },
+  openGraph: {
+    title: "Convert PDF to JPG Online Free | ImageConvertersACRAV",
+    description:
+      "Convert each page of your PDF into a high-quality JPEG image. All processing happens in your browser — no uploads needed.",
+    url: `${SITE_URL}/tools/pdf-to-jpg`,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Convert PDF to JPG Online Free | ImageConvertersACRAV",
+    description:
+      "Convert each page of your PDF into a high-quality JPEG image. All processing happens in your browser — no uploads needed.",
+  },
 };
 
 export default function PdfToJpgPage() {
   return (
-    <PdfUnavailableTool
+    <ToolErrorBoundary>
+      <PdfToJpgTool
       title="PDF to JPG"
-      description="Convert each page of your PDF into a high-quality JPEG image."
-      operation="convert PDF pages to images"
-      reason="Rendering PDF pages to images requires a PDF renderer — a library that can parse PDF content streams, execute drawing commands (text, paths, images), and composite them onto a canvas. Browsers have a built-in PDF viewer, but it cannot be accessed programmatically from JavaScript to render individual pages to Canvas elements for export."
-      api="pdf.js (pdfjs-dist, renderPage with canvas context)"
+      description="Convert each page of your PDF into a high-quality JPEG image. Uses PDF.js to render pages at 2x resolution for crisp output. All processing happens in your browser — nothing is uploaded."
       faqs={[
         {
-          question: "Why does PDF rendering need a library?",
-          answer: "PDF is a page description language, not an image format. To convert a page to JPG, a renderer must interpret all PDF commands (text, vector graphics, images) and draw them onto a canvas. The browser's built-in PDF viewer cannot be accessed programmatically — a library like PDF.js is required.",
+          question: "How does PDF to JPG conversion work?",
+          answer: "The tool uses PDF.js, Mozilla's PDF rendering library, to render each page onto a canvas at 2x resolution. The canvas is then exported as a high-quality JPEG image. Everything runs client-side.",
         },
         {
-          question: "Can I use the browser's PDF viewer?",
-          answer: "The browser's native PDF viewer (<embed>, <iframe> with PDF) displays PDFs but provides no JavaScript API to extract page content or render to canvas. PDF.js is the standard library for this and works entirely client-side.",
+          question: "What image quality can I expect?",
+          answer: "Pages are rendered at 2x scale (144 DPI equivalent) and saved as JPEG at 92% quality. This provides excellent readability while keeping file sizes reasonable.",
+        },
+        {
+          question: "Can encrypted PDFs be converted?",
+          answer: "No. Password-protected or encrypted PDFs cannot be rendered because the content cannot be accessed without decryption.",
         },
         {
           question: "Is my data safe?",
-          answer: "Once a PDF renderer library is integrated, this tool will process everything in your browser. No files would be uploaded to any server.",
+          answer: "Absolutely. All rendering is done in your browser using client-side JavaScript. Your files never leave your device.",
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }

@@ -1,14 +1,21 @@
 import type { Metadata } from "next";
 import FlipTool from "@/components/tools/FlipTool";
+import ToolErrorBoundary from "@/components/tools/ToolErrorBoundary";
 
 export const metadata: Metadata = {
-  title: "Image Flipper",
+  title: "Image Flipper — Flip Images Horizontally or Vertically Online",
   description: "Flip images horizontally or vertically online. Mirror your photos instantly. Free, fast, and private — all in your browser.",
+  keywords: ["image flipper", "flip image", "mirror image", "horizontal flip", "vertical flip"],
+  openGraph: {
+    title: "Image Flipper — Flip Images Horizontally or Vertically Online",
+    description: "Flip images horizontally or vertically online. Mirror your photos instantly. Free, fast, and private.",
+  },
 };
 
 export default function ImageFlipperPage() {
   return (
-    <FlipTool
+    <ToolErrorBoundary>
+      <FlipTool
       title="Image Flipper"
       description="Flip your image horizontally or vertically. Perfect for correcting mirror images, creating reflections, or artistic effects. All processing happens in your browser."
       faqs={[
@@ -30,5 +37,6 @@ export default function ImageFlipperPage() {
         },
       ]}
     />
+    </ToolErrorBoundary>
   );
 }
