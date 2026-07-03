@@ -20,6 +20,7 @@ import {
   extractToc,
   processContent,
   getSortedPosts,
+  slugify,
 } from "@/data/blog/utils";
 import { SITE_URL } from "@/lib/constants/site";
 
@@ -109,7 +110,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               "@type": "ListItem" as const,
               position: 3,
               name: post.categories[0],
-              item: `${SITE_URL}/blog/category/${post.categories[0].toLowerCase().replace(/\s+/g, "-")}`,
+              item: `${SITE_URL}/blog/category/${slugify(post.categories[0])}`,
             },
             {
               "@type": "ListItem" as const,
@@ -148,7 +149,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               ? [
                   {
                     label: post.categories[0],
-                    href: `/blog/category/${post.categories[0].toLowerCase().replace(/\s+/g, "-")}`,
+                    href: `/blog/category/${slugify(post.categories[0])}`,
                   },
                 ]
               : []),
@@ -207,7 +208,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   {post.tags.map((tag) => (
                     <Link
                       key={tag}
-                      href={`/blog/tag/${tag.toLowerCase().replace(/\s+/g, "-")}`}
+                      href={`/blog/tag/${slugify(tag)}`}
                       className="text-xs font-medium text-zinc-500 bg-zinc-100 px-2.5 py-1 rounded-md hover:bg-zinc-200 dark:text-zinc-400 dark:bg-zinc-800 dark:hover:bg-zinc-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                     >
                       #{tag}

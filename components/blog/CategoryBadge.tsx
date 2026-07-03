@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { slugify } from "@/data/blog/utils";
 
 interface CategoryBadgeProps {
   name: string;
@@ -8,7 +9,7 @@ interface CategoryBadgeProps {
 export default function CategoryBadge({ name, size = "sm" }: CategoryBadgeProps) {
   return (
     <Link
-      href={`/blog/category/${name.toLowerCase().replace(/\s+/g, "-")}`}
+      href={`/blog/category/${slugify(name)}`}
       className={`font-semibold text-blue-600 bg-blue-50 rounded-full hover:bg-blue-100 dark:text-blue-400 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 transition-colors ${
         size === "sm"
           ? "text-xs px-3 py-1"

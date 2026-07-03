@@ -22,6 +22,16 @@ export function getSortedPosts(): BlogPost[] {
   );
 }
 
+export function slugify(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/&/g, "-and-")
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9-]/g, "")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
 export function getCategories() {
   const map = new Map<string, number>();
   blogPosts.forEach((post) => {
@@ -32,7 +42,7 @@ export function getCategories() {
   return Array.from(map.entries())
     .map(([name, count]) => ({
       name,
-      slug: name.toLowerCase().replace(/\s+/g, "-"),
+      slug: slugify(name),
       count,
     }))
     .sort((a, b) => b.count - a.count);
@@ -48,7 +58,7 @@ export function getTags() {
   return Array.from(map.entries())
     .map(([name, count]) => ({
       name,
-      slug: name.toLowerCase().replace(/\s+/g, "-"),
+      slug: slugify(name),
       count,
     }))
     .sort((a, b) => b.count - a.count);
@@ -56,13 +66,13 @@ export function getTags() {
 
 export function getPostsByCategory(slug: string): BlogPost[] {
   return getSortedPosts().filter((post) =>
-    post.categories.some((cat) => cat.toLowerCase().replace(/\s+/g, "-") === slug)
+    post.categories.some((cat) => slugify(cat) === slug)
   );
 }
 
 export function getPostsByTag(slug: string): BlogPost[] {
   return getSortedPosts().filter((post) =>
-    post.tags.some((tag) => tag.toLowerCase().replace(/\s+/g, "-") === slug)
+    post.tags.some((tag) => slugify(tag) === slug)
   );
 }
 
