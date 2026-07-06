@@ -23,6 +23,15 @@ import {
   slugify,
 } from "@/data/blog/utils";
 import { SITE_URL } from "@/lib/constants/site";
+import JsonLd from "@/components/JsonLd";
+import {
+  articleSchema,
+  breadcrumbListSchema,
+  faqPageSchema,
+  webPageSchema,
+  extractFaqFromContent,
+  stripJsonLdFromContent,
+} from "@/lib/structured-data";
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
@@ -71,72 +80,41 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     notFound();
   }
 
-  const contentHtml = processContent(post.content);
-  const tocItems = extractToc(post.content);
+  const faqData = extractFaqFromContent(post.content);
+  const cleanContent = faqData ? stripJsonLdFromContent(post.content) : post.content;
+  const contentHtml = processContent(cleanContent);
+  const tocItems = extractToc(cleanContent);
   const { prev, next } = getAdjacentPosts(post);
   const relatedPosts = getRelatedPosts(post, 6);
   const relatedTools = getRelatedTools(post, 6);
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline: post.title,
-    description: post.description,
-    author: {
-      "@type": "Person",
-      name: post.author.name,
-    },
-    datePublished: post.publishedAt,
-    ...(post.updatedAt ? { dateModified: post.updatedAt } : {}),
-    publisher: {
-      "@type": "Organization",
-      name: "ImageConvertersACRAV",
-    },
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": `${SITE_URL}/blog/${slug}`,
-    },
-  };
-
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-      { "@type": "ListItem", position: 2, name: "Blog", item: `${SITE_URL}/blog` },
-      ...(post.categories.length > 0
-        ? [
-            {
-              "@type": "ListItem" as const,
-              position: 3,
-              name: post.categories[0],
-              item: `${SITE_URL}/blog/category/${slugify(post.categories[0])}`,
-            },
-            {
-              "@type": "ListItem" as const,
-              position: 4,
-              name: post.title,
-            },
-          ]
-        : [
-            {
-              "@type": "ListItem" as const,
-              position: 3,
-              name: post.title,
-            },
-          ]),
-    ],
-  };
-
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      <JsonLd data={articleSchema(post, SITE_URL, "ImageConvertersACRAV")} />
+      <JsonLd
+        data={breadcrumbListSchema([
+          { name: "Home", item: SITE_URL },
+          { name: "Blog", item: `${SITE_URL}/blog` },
+          ...(post.categories.length > 0
+            ? [
+                {
+                  name: post.categories[0],
+                  item: `${SITE_URL}/blog/category/${slugify(post.categories[0])}`,
+                },
+              ]
+            : []),
+          { name: post.title },
+        ])}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      {faqData && faqData.length > 0 && (
+        <JsonLd data={faqPageSchema(faqData)} />
+      )}
+      <JsonLd
+        data={webPageSchema(
+          post.title,
+          post.description,
+          `${SITE_URL}/blog/${slug}`,
+        )}
       />
       <ReadingProgressBar />
       <ScrollToTop />

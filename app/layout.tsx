@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import Script from "next/script";
 import CookieConsent from "@/components/CookieConsent";
+import JsonLd from "@/components/JsonLd";
+import { organizationSchema, websiteSchema } from "@/lib/structured-data";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from "@/lib/constants/site";
@@ -138,6 +140,8 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
+        <JsonLd data={organizationSchema(SITE_URL, SITE_NAME, SITE_DESCRIPTION)} />
+        <JsonLd data={websiteSchema(SITE_URL, SITE_NAME, SITE_DESCRIPTION)} />
         <GoogleAnalytics gaId="G-TWFESR9SC7" />
         <Script
           id="microsoft-clarity"

@@ -13,6 +13,12 @@ import {
 } from "@/data/blog/utils";
 import Link from "next/link";
 import { SITE_URL } from "@/lib/constants/site";
+import JsonLd from "@/components/JsonLd";
+import {
+  collectionPageSchema,
+  breadcrumbListSchema,
+  webPageSchema,
+} from "@/lib/structured-data";
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -51,29 +57,32 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const categories = getCategories();
   const tags = getTags();
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    name: "Blog | ImageConvertersACRAV",
-    description:
-      "Articles, tutorials, and guides about image processing, PDF tools, and web development.",
-    url: `${SITE_URL}/blog`,
-    mainEntity: {
-      "@type": "ItemList",
-      itemListElement: getSortedPosts().slice(0, 9).map((post, i) => ({
-        "@type": "ListItem",
-        position: i + 1,
-        url: `${SITE_URL}/blog/${post.slug}`,
-      })),
-    },
-  };
+  const allPosts = getSortedPosts();
 
   return (
-    <Container className="py-10 sm:py-12">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    <>
+      <JsonLd
+        data={collectionPageSchema(
+          "Blog | ImageConvertersACRAV",
+          "Articles, tutorials, and guides about image processing, PDF tools, and web development.",
+          `${SITE_URL}/blog`,
+          allPosts.map((post) => ({ url: `${SITE_URL}/blog/${post.slug}` })),
+        )}
       />
+      <JsonLd
+        data={breadcrumbListSchema([
+          { name: "Home", item: SITE_URL },
+          { name: "Blog" },
+        ])}
+      />
+      <JsonLd
+        data={webPageSchema(
+          "Blog | ImageConvertersACRAV",
+          "Articles, tutorials, and guides about image processing, PDF tools, and web development.",
+          `${SITE_URL}/blog`,
+        )}
+      />
+    <Container className="py-10 sm:py-12">
       <div className="mb-10">
         <Breadcrumb
           items={[
@@ -159,5 +168,6 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
         </aside>
       </div>
     </Container>
+    </>
   );
 }

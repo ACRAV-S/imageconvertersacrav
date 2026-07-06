@@ -2,6 +2,13 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Container from "@/components/common/Container";
+import JsonLd from "@/components/JsonLd";
+import {
+  softwareApplicationSchema,
+  breadcrumbListSchema,
+  webPageSchema,
+} from "@/lib/structured-data";
+import { SITE_URL } from "@/lib/constants/site";
 import { tools, getToolBySlug } from "@/data";
 
 interface ToolPageProps {
@@ -79,7 +86,19 @@ export default async function ToolPage({ params }: ToolPageProps) {
   }
 
   return (
-    <Container className="py-12">
+    <>
+      <JsonLd data={softwareApplicationSchema(tool, SITE_URL)} />
+      <JsonLd
+        data={breadcrumbListSchema([
+          { name: "Home", item: SITE_URL },
+          { name: "Tools", item: `${SITE_URL}/tools` },
+          { name: tool.title },
+        ])}
+      />
+      <JsonLd
+        data={webPageSchema(tool.title, tool.description, `${SITE_URL}/tools/${slug}`)}
+      />
+      <Container className="py-12">
       <div className="mb-8">
         <Link
           href="/tools"
@@ -113,5 +132,6 @@ export default async function ToolPage({ params }: ToolPageProps) {
         </p>
       </div>
     </Container>
+    </>
   );
 }

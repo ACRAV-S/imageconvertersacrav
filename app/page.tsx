@@ -3,6 +3,8 @@ import Link from "next/link";
 import Container from "@/components/common/Container";
 import CategoryCard from "@/components/tools/CategoryCard";
 import ToolGrid from "@/components/tools/ToolGrid";
+import JsonLd from "@/components/JsonLd";
+import { webPageSchema } from "@/lib/structured-data";
 import { categories, getPopularTools } from "@/data";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://imageconvertersacrav.vercel.app";
@@ -26,19 +28,14 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: "ImageConvertersACRAV",
-    url: SITE_URL,
-    description: "Free online image converter, PDF tools, text utilities, and developer tools. Fast, private, client-side processing.",
-  };
-
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      <JsonLd
+        data={webPageSchema(
+          "Free Online Image Converter & Utility Tools",
+          "Convert images, compress PDFs, format code, and more. 100+ free online tools — all processing runs client-side. Your files never leave your device.",
+          SITE_URL,
+        )}
       />
       <div className="flex-1 flex flex-col">
       <section className="relative overflow-hidden border-b border-zinc-100 dark:border-zinc-800">

@@ -6,6 +6,12 @@ import Pagination from "@/components/blog/Pagination";
 import Breadcrumb from "@/components/blog/Breadcrumb";
 import { getPostsByTag, getTags, paginatePosts } from "@/data/blog/utils";
 import { SITE_URL } from "@/lib/constants/site";
+import JsonLd from "@/components/JsonLd";
+import {
+  collectionPageSchema,
+  breadcrumbListSchema,
+  webPageSchema,
+} from "@/lib/structured-data";
 
 interface TagPageProps {
   params: Promise<{ slug: string }>;
@@ -54,20 +60,31 @@ export default async function TagPage({ params, searchParams }: TagPageProps) {
   const allPosts = getPostsByTag(slug);
   const { posts, totalPages } = paginatePosts(allPosts, currentPage, 9);
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    name: `#${tag.name} Articles | ImageConvertersACRAV Blog`,
-    description: `Browse all articles tagged with #${tag.name}.`,
-    url: `${SITE_URL}/blog/tag/${slug}`,
-  };
-
   return (
-    <Container className="py-10 sm:py-12">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    <>
+      <JsonLd
+        data={collectionPageSchema(
+          `#${tag.name} Articles | ImageConvertersACRAV Blog`,
+          `Browse all articles tagged with #${tag.name}.`,
+          `${SITE_URL}/blog/tag/${slug}`,
+          allPosts.map((post) => ({ url: `${SITE_URL}/blog/${post.slug}` })),
+        )}
       />
+      <JsonLd
+        data={breadcrumbListSchema([
+          { name: "Home", item: SITE_URL },
+          { name: "Blog", item: `${SITE_URL}/blog` },
+          { name: `#${tag.name}` },
+        ])}
+      />
+      <JsonLd
+        data={webPageSchema(
+          `#${tag.name} Articles | ImageConvertersACRAV Blog`,
+          `Browse all articles tagged with #${tag.name}.`,
+          `${SITE_URL}/blog/tag/${slug}`,
+        )}
+      />
+    <Container className="py-10 sm:py-12">
       <div className="mb-10">
         <Breadcrumb
           items={[
@@ -93,5 +110,6 @@ export default async function TagPage({ params, searchParams }: TagPageProps) {
         searchParams={{}}
       />
     </Container>
+    </>
   );
 }

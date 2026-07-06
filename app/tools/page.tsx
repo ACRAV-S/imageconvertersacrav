@@ -4,6 +4,13 @@ import Link from "next/link";
 import Container from "@/components/common/Container";
 import ToolGrid from "@/components/tools/ToolGrid";
 import CategoryCard from "@/components/tools/CategoryCard";
+import JsonLd from "@/components/JsonLd";
+import {
+  collectionPageSchema,
+  breadcrumbListSchema,
+  webPageSchema,
+} from "@/lib/structured-data";
+import { SITE_URL } from "@/lib/constants/site";
 import { tools, categories } from "@/data";
 
 export const metadata: Metadata = {
@@ -32,6 +39,32 @@ export default async function ToolsPage({ searchParams }: ToolsPageProps) {
     : null;
 
   return (
+    <>
+      <JsonLd
+        data={collectionPageSchema(
+          selectedCategory ? selectedCategory.title : "All Tools",
+          selectedCategory
+            ? selectedCategory.description
+            : "Browse our collection of free online utilities.",
+          `${SITE_URL}/tools${category ? `?category=${category}` : ""}`,
+          tools.map((t) => ({ url: `${SITE_URL}/tools/${t.slug}` })),
+        )}
+      />
+      <JsonLd
+        data={breadcrumbListSchema([
+          { name: "Home", item: SITE_URL },
+          { name: selectedCategory ? selectedCategory.title : "Tools" },
+        ])}
+      />
+      <JsonLd
+        data={webPageSchema(
+          selectedCategory ? selectedCategory.title : "All Tools",
+          selectedCategory
+            ? selectedCategory.description
+            : "Browse our collection of free online utilities.",
+          `${SITE_URL}/tools${category ? `?category=${category}` : ""}`,
+        )}
+      />
     <Container className="py-12">
       <div className="flex items-center justify-between gap-4">
         <div>
@@ -82,5 +115,6 @@ export default async function ToolsPage({ searchParams }: ToolsPageProps) {
         )}
       </div>
     </Container>
+    </>
   );
 }
