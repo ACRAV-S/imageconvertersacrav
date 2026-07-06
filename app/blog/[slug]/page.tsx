@@ -15,13 +15,15 @@ import Image from "next/image";
 import {
   getPostBySlug,
   getAdjacentPosts,
-  getRelatedPosts,
-  getRelatedTools,
   extractToc,
   processContent,
   getSortedPosts,
   slugify,
 } from "@/data/blog/utils";
+import {
+  getRelatedPostsImproved,
+  getRelatedToolsImproved,
+} from "@/lib/internal-linking";
 import { SITE_URL } from "@/lib/constants/site";
 import JsonLd from "@/components/JsonLd";
 import {
@@ -85,8 +87,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const contentHtml = processContent(cleanContent);
   const tocItems = extractToc(cleanContent);
   const { prev, next } = getAdjacentPosts(post);
-  const relatedPosts = getRelatedPosts(post, 6);
-  const relatedTools = getRelatedTools(post, 6);
+  const relatedPosts = getRelatedPostsImproved(post, 6);
+  const relatedTools = getRelatedToolsImproved(post, 6);
 
   return (
     <>
