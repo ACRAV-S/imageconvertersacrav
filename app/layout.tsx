@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import Script from "next/script";
+import CookieConsent from "@/components/CookieConsent";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from "@/lib/constants/site";
@@ -82,6 +83,42 @@ export default function RootLayout({
             `,
           }}
         />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              try {
+                var c = localStorage.getItem('cookie-consent');
+                if (c) {
+                  gtag('consent', 'default', JSON.parse(c));
+                } else {
+                  gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied',
+                    'functionality_storage': 'denied',
+                    'personalization_storage': 'denied',
+                    'security_storage': 'granted',
+                    'wait_for_update': 500
+                  });
+                }
+              } catch(e) {
+                gtag('consent', 'default', {
+                  'ad_storage': 'denied',
+                  'ad_user_data': 'denied',
+                  'ad_personalization': 'denied',
+                  'analytics_storage': 'denied',
+                  'functionality_storage': 'denied',
+                  'personalization_storage': 'denied',
+                  'security_storage': 'granted',
+                  'wait_for_update': 500
+                });
+              }
+            `,
+          }}
+        />
         <Script
     async
     strategy="afterInteractive"
@@ -115,6 +152,7 @@ export default function RootLayout({
             `,
           }}
         />
+        <CookieConsent />
       </body>
     </html>
   );
